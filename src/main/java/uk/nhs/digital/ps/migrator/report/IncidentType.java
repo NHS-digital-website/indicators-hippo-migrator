@@ -74,6 +74,16 @@ public enum IncidentType {
             + "\nA decision is needed on whether the summary can be migrated as is"
             + "\nor does it require some sanitizing."
     ),
+    DUPLICATE_DATASET_PATH(
+        ONE_DUPLICATE_DATASET_MIGRATED,
+        "Multiple datasets share the same path",
+        "Shared path",
+        "More than one dataset have been found to have the same CMS path."
+            + "\nThis is probably due to two Datasets having been defined in the"
+            + "\nsame location, having different P-codes but the same title"
+            + "\n"
+            + "\nOffending datasets need reviewing in the existing portal."
+    ),
     DUPLICATE_PCODE_IMPORTED( // found when scanning list of all the JSON files prepared for import
         FIELD_MIGRATED_AS_IS,
         "Duplicate P-code imported twice"

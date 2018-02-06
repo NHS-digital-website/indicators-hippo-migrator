@@ -31,8 +31,11 @@ public class TextHelper {
         return sanitisedText;
     }
 
-    public static String toLowerCaseDashedValue(final String input) {
+    public static String normaliseToJcrPathName(final String input) {
         return input.toLowerCase()
+            .replaceAll(">", "gt")           // sanitise comparison characters
+            .replaceAll("<", "lt")
+            .replaceAll("=", "eq")
             .replaceAll("[^a-z0-9]", "-")    // replace anything that isn't an alphanumeric with dash
             .replaceAll("-+", "-")           // eliminate duplicate dashes
             .replaceAll("(^-|-$)", "")       // eliminate leading or trailing dashes
@@ -60,7 +63,7 @@ public class TextHelper {
     }
 
     public static String toLowerCaseDashedShortValue(final String input) {
-        return Arrays.stream(toLowerCaseDashedValue(input).split("-"))
+        return Arrays.stream(normaliseToJcrPathName(input).split("-"))
             .map(word -> StringUtils.truncate(word, 3))
             .collect(Collectors.joining("-"));
     }

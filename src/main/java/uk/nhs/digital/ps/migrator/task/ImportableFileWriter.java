@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
-import static uk.nhs.digital.ps.migrator.misc.TextHelper.toLowerCaseDashedValue;
 import static uk.nhs.digital.ps.migrator.report.IncidentType.DATASET_IMPORT_FILE_FAILURE;
 
 public class ImportableFileWriter {
@@ -104,7 +103,7 @@ public class ImportableFileWriter {
             StringUtils.leftPad("",importableItem.getDepth(), '_'),
             importableItem.getClass().getSimpleName().toUpperCase(),
             importableItem instanceof DataSet ? "_" + ((DataSet) importableItem).getPCode() : "",
-            toLowerCaseDashedValue(importableItem.getLocalizedName())
+            importableItem.getJcrNodeName()
         );
     }
 

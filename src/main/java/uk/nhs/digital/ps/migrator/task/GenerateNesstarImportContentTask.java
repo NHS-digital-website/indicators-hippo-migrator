@@ -1,5 +1,6 @@
 package uk.nhs.digital.ps.migrator.task;
 
+import static java.text.MessageFormat.format;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.*;
 import static uk.nhs.digital.ps.migrator.misc.XmlHelper.loadFromXml;
@@ -16,6 +17,7 @@ import uk.nhs.digital.ps.migrator.model.nesstar.Catalog;
 import uk.nhs.digital.ps.migrator.model.nesstar.CatalogStructure;
 import uk.nhs.digital.ps.migrator.model.nesstar.DataSetRepository;
 import uk.nhs.digital.ps.migrator.model.nesstar.PublishingPackage;
+import uk.nhs.digital.ps.migrator.report.IncidentType;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
 import uk.nhs.digital.ps.migrator.task.importables.CcgImportables;
 import uk.nhs.digital.ps.migrator.task.importables.CompendiumImportables;
@@ -129,12 +131,16 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
 
         identifyPCodesFromIgnoredSections(catalogStructure, deliberatelyIgnoredPCodes);
 
-        reportDuplicateDatasets(importableItems);
+        reportDuplicatePCodes(importableItems);
+
+        reportDuplicateDatasetPaths(importableItems);
+
+        reportDuplicateNonDatasetPaths(importableItems);
 
         reportMissedDatasets(dataSetRepository, importableItems, deliberatelyIgnoredPCodes);
     }
 
-    private void reportDuplicateDatasets(final List<HippoImportableItem> importableItems) {
+    private void reportDuplicatePCodes(final List<HippoImportableItem> importableItems) {
 
         final Set<String> visitedPcodes = new HashSet<>();
 
@@ -144,6 +150,40 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
             .map(DataSet::getPCode)
             .filter(pCode -> !visitedPcodes.add(pCode))
             .forEach(pCode -> migrationReport.report(pCode, DUPLICATE_PCODE_IMPORTED));
+    }
+
+    private void reportDuplicateDatasetPaths(final List<HippoImportableItem> importableItems) {
+
+        final Map<String, List<String>> pathsToPCodes = importableItems.stream()
+            .filter(DataSet.class::isInstance)
+            .map(hippoImportableItem -> (DataSet) hippoImportableItem)
+            .collect(groupingBy(
+                DataSet::getJcrPath,
+                mapping(DataSet::getPCode, toList()))
+        );
+
+        pathsToPCodes.entrySet().stream().forEach(entry -> {
+
+            final String path = entry.getKey();
+            final List<String> pCodes = entry.getValue();
+
+            if (pCodes.size() > 1) {
+                pCodes.forEach(pCode -> {
+                    migrationReport.report(pCode, IncidentType.DUPLICATE_DATASET_PATH, path);
+                });
+            }
+        });
+    }
+
+    private void reportDuplicateNonDatasetPaths(final List<HippoImportableItem> importableItems) {
+
+        final Set<String> visitedPaths = new HashSet<>();
+
+        importableItems.stream()
+            .filter(hippoImportableItem -> !DataSet.class.isInstance(hippoImportableItem))
+            .map(HippoImportableItem::getJcrPath)
+            .filter(item -> !visitedPaths.add(item))
+            .forEach(path -> migrationReport.logError(format("Duplicate path: {0}", path)));
     }
 
     private void reportMissedDatasets(final DataSetRepository dataSetRepository,

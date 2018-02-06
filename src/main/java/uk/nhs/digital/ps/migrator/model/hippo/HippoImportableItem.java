@@ -93,7 +93,7 @@ public abstract class HippoImportableItem {
     }
 
     private void updateJcrNodeName() {
-        setJcrNodeName(TextHelper.toLowerCaseDashedValue(getLocalizedName()));
+        setJcrNodeName(TextHelper.normaliseToJcrPathName(getLocalizedName()));
     }
 
     private void updateJcrPath() {

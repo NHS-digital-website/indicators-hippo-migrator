@@ -122,7 +122,7 @@ public class MigrationReport {
     private File getMigrationReportFile(final String reportGenerationTimestamp) {
         Path migrationReportFilePath = executionParameters.getMigrationReportFilePath();
 
-        final String migrationReportFileName = migrationReportFilePath.getFileName().toString()
+        final String migrationReportFileName = getFileName(migrationReportFilePath).toString()
             .replaceAll("\\{TIMESTAMP\\}", reportGenerationTimestamp);
 
         migrationReportFilePath = Paths.get(migrationReportFilePath.getParent().toString(), migrationReportFileName);
@@ -265,23 +265,23 @@ public class MigrationReport {
         currentRowNumber.addAndGet(1);
 
         addMetaDataRow(labelCellStyle, valueCellStyle, metadataSheet, currentRowNumber.addAndGet(1),
-            "Nesstar export file used", executionParameters.getNesstarZippedExportFile().getFileName()
+            "Nesstar export file used", getFileName(executionParameters.getNesstarZippedExportFile())
         );
 
         addMetaDataRow(labelCellStyle, valueCellStyle, metadataSheet, currentRowNumber.addAndGet(1),
-            "Compendium Mapping file used", executionParameters.getNesstarCompendiumMappingFile().getFileName()
+            "Compendium Mapping file used", getFileName(executionParameters.getNesstarCompendiumMappingFile())
         );
 
         addMetaDataRow(labelCellStyle, valueCellStyle, metadataSheet, currentRowNumber.addAndGet(1),
-            "Fields Mapping file used", executionParameters.getNesstarFieldMappingImportPath().getFileName()
+            "Fields Mapping file used", getFileName(executionParameters.getNesstarFieldMappingImportPath())
         );
 
         addMetaDataRow(labelCellStyle, valueCellStyle, metadataSheet, currentRowNumber.addAndGet(1),
-            "Taxonomy definition file used", executionParameters.getTaxonomyDefinitionImportPath().getFileName()
+            "Taxonomy definition file used", getFileName(executionParameters.getTaxonomyDefinitionImportPath())
         );
 
         addMetaDataRow(labelCellStyle, valueCellStyle, metadataSheet, currentRowNumber.addAndGet(1),
-            "Taxonomy mapping file used", executionParameters.getTaxonomyMappingImportPath().getFileName()
+            "Taxonomy mapping file used", getFileName(executionParameters.getTaxonomyMappingImportPath())
         );
 
         currentRowNumber.addAndGet(3);
@@ -303,6 +303,10 @@ public class MigrationReport {
 
         metadataSheet.autoSizeColumn(2);
         metadataSheet.autoSizeColumn(3);
+    }
+
+    private String getFileName(final Path path) {
+        return path != null ? path.getFileName().toString() : "n/a";
     }
 
     private void addMetaDataRow(final CellStyle labelCellStyle,
