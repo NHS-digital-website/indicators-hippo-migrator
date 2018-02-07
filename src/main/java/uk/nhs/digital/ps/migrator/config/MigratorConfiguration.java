@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.nhs.digital.ps.migrator.model.hippo.MappedFieldsImporter;
+import uk.nhs.digital.ps.migrator.model.hippo.NationalIndicatorMigrator;
 import uk.nhs.digital.ps.migrator.model.hippo.TaxonomyMigrator;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
 import uk.nhs.digital.ps.migrator.task.*;
@@ -20,20 +21,21 @@ public class MigratorConfiguration {
 
     @Bean
     public List<MigrationTask> tasks(final ExecutionParameters executionParameters,
-                                     final NesstarImportableItemsFactory nesstarImportableItemsFactory,
+                                     final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory,
                                      final SocialCareImportables socialCareImportables,
                                      final CcgImportables ccgImportables,
                                      final NhsOutcomesFrameworkImportables nhsOutcomesFrameworkImportables,
                                      final CompendiumImportables compendiumImportables,
                                      final ImportableFileWriter importableFileWriter,
                                      final MigrationReport migrationReport,
-                                     final TaxonomyMigrator taxonomyMigrator) {
+                                     final TaxonomyMigrator taxonomyMigrator,
+                                     final NationalIndicatorMigrator nationalIndicatorMigrator) {
 
         return asList(
             new UnzipNesstarExportFileTask(executionParameters),
             new GenerateNesstarImportContentTask(
                 executionParameters,
-                nesstarImportableItemsFactory,
+                    clinicalIndicatorsImportableItemsFactory,
                 socialCareImportables,
                 ccgImportables,
                 nhsOutcomesFrameworkImportables,
@@ -42,7 +44,11 @@ public class MigratorConfiguration {
                 migrationReport,
                 taxonomyMigrator),
             new GenerateTaxonomyTask(executionParameters,
-                taxonomyMigrator)
+                taxonomyMigrator),
+            new GenerateIndicatorImportContentTask(
+                executionParameters,
+                nationalIndicatorMigrator,
+                importableFileWriter)                
         );
     }
 
@@ -62,12 +68,12 @@ public class MigratorConfiguration {
     }
 
     @Bean
-    public NesstarImportableItemsFactory importableItemsFactory(final ExecutionParameters executionParameters,
-                                                         final MigrationReport migrationReport,
-                                                         final TaxonomyMigrator taxonomyMigrator,
-                                                         final MappedFieldsImporter mappedFieldsImporter)
+    public ClinicalIndicatorsImportableItemsFactory importableItemsFactory(final ExecutionParameters executionParameters,
+                                                                           final MigrationReport migrationReport,
+                                                                           final TaxonomyMigrator taxonomyMigrator,
+                                                                           final MappedFieldsImporter mappedFieldsImporter)
     {
-        return new NesstarImportableItemsFactory(executionParameters, migrationReport, taxonomyMigrator, mappedFieldsImporter);
+        return new ClinicalIndicatorsImportableItemsFactory(executionParameters, migrationReport, taxonomyMigrator, mappedFieldsImporter);
     }
 
     @Bean
@@ -76,26 +82,26 @@ public class MigratorConfiguration {
     }
 
     @Bean
-    public CcgImportables ccgImportables(final NesstarImportableItemsFactory nesstarImportableItemsFactory) {
-        return new CcgImportables(nesstarImportableItemsFactory);
+    public CcgImportables ccgImportables(final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory) {
+        return new CcgImportables(clinicalIndicatorsImportableItemsFactory);
     }
 
     @Bean
-    public SocialCareImportables socialCareImportables(final NesstarImportableItemsFactory nesstarImportableItemsFactory) {
-        return new SocialCareImportables(nesstarImportableItemsFactory);
+    public SocialCareImportables socialCareImportables(final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory) {
+        return new SocialCareImportables(clinicalIndicatorsImportableItemsFactory);
     }
 
     @Bean
-    public NhsOutcomesFrameworkImportables nhsOutcomesFrameworkImportables(final NesstarImportableItemsFactory nesstarImportableItemsFactory) {
-        return new NhsOutcomesFrameworkImportables(nesstarImportableItemsFactory);
+    public NhsOutcomesFrameworkImportables nhsOutcomesFrameworkImportables(final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory) {
+        return new NhsOutcomesFrameworkImportables(clinicalIndicatorsImportableItemsFactory);
     }
 
     @Bean
     public CompendiumImportables compendiumImportables(final ExecutionParameters executionParameters,
-                                                       final NesstarImportableItemsFactory nesstarImportableItemsFactory,
+                                                       final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory,
                                                        final MigrationReport migrationReport
     ) {
-        return new CompendiumImportables(executionParameters, nesstarImportableItemsFactory, migrationReport);
+        return new CompendiumImportables(executionParameters, clinicalIndicatorsImportableItemsFactory, migrationReport);
     }
 
     @Bean
@@ -109,4 +115,9 @@ public class MigratorConfiguration {
                                                      final ExecutionParameters executionParameters) {
         return new MappedFieldsImporter(migrationReport, executionParameters);
     }
+
+    @Bean
+    public NationalIndicatorMigrator indicatorMigrator(final ExecutionParameters executionParameters) {
+        return new NationalIndicatorMigrator(executionParameters);
+    }        
 }

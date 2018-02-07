@@ -24,7 +24,7 @@ import java.util.stream.StreamSupport;
  * This class is responsible for providing the taxonomy definition that we are going
  * to import into hippo and a mapping to those terms from existing P Codes.
  */
-public class TaxonomyMigrator {
+public class TaxonomyMigrator extends BaseXlsReader {
 
     private static final String TAXONOMY_ROOT_NODE_NAME = "publication_taxonomy";
     private static final String TAXONOMY_DEFINITION_COLUMN = "concept";
@@ -198,25 +198,4 @@ public class TaxonomyMigrator {
         taxonomyDefinition = root;
     }
 
-    private static Stream<Cell> streamRow(Row row) {
-        return StreamSupport.stream(((Iterable<Cell>) row::cellIterator).spliterator(), false);
-    }
-
-    private static Iterator<Row> getRowIterator(Path path, final String sheetName) {
-        XSSFWorkbook workbook;
-        try {
-            workbook = new XSSFWorkbook(path.toString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        XSSFSheet sheet = workbook.getSheet(sheetName);
-
-        if (sheet == null) {
-            throw new RuntimeException(sheetName + " not found in " + path);
-        }
-
-
-        return sheet.rowIterator();
-    }
 }

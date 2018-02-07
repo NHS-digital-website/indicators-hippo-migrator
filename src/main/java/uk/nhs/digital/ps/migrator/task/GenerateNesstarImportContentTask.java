@@ -1,16 +1,8 @@
 package uk.nhs.digital.ps.migrator.task;
 
-import static java.text.MessageFormat.format;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.*;
-import static uk.nhs.digital.ps.migrator.misc.XmlHelper.loadFromXml;
-import static uk.nhs.digital.ps.migrator.report.IncidentType.DUPLICATE_PCODE_IMPORTED;
-import static uk.nhs.digital.ps.migrator.report.IncidentType.NO_DATASET_MAPPING;
-
-import org.apache.commons.io.FileUtils;
 import uk.nhs.digital.ps.migrator.config.ExecutionParameters;
 import uk.nhs.digital.ps.migrator.model.hippo.DataSet;
-import uk.nhs.digital.ps.migrator.model.hippo.Folder;
+import uk.nhs.digital.ps.migrator.model.hippo.CiFolder;
 import uk.nhs.digital.ps.migrator.model.hippo.HippoImportableItem;
 import uk.nhs.digital.ps.migrator.model.hippo.TaxonomyMigrator;
 import uk.nhs.digital.ps.migrator.model.nesstar.Catalog;
@@ -32,6 +24,14 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.text.MessageFormat.format;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.*;
+import static uk.nhs.digital.ps.migrator.misc.FileHelper.recreate;
+import static uk.nhs.digital.ps.migrator.misc.XmlHelper.loadFromXml;
+import static uk.nhs.digital.ps.migrator.report.IncidentType.DUPLICATE_PCODE_IMPORTED;
+import static uk.nhs.digital.ps.migrator.report.IncidentType.NO_DATASET_MAPPING;
+
 public class GenerateNesstarImportContentTask implements MigrationTask {
 
     private static final String PUBLISHING_PACKAGES_DIR_NAME = "PublishingPackages";
@@ -42,7 +42,7 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
 
     private final ExecutionParameters executionParameters;
 
-    private final NesstarImportableItemsFactory nesstarImportableItemsFactory;
+    private final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory;
     private final SocialCareImportables socialCareImportables;
     private final CcgImportables ccgImportables;
     private final NhsOutcomesFrameworkImportables nhsOutcomesFrameworkImportables;
@@ -53,7 +53,7 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
 
 
     public GenerateNesstarImportContentTask(final ExecutionParameters executionParameters,
-                                            final NesstarImportableItemsFactory nesstarImportableItemsFactory,
+                                            final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory,
                                             final SocialCareImportables socialCareImportables,
                                             final CcgImportables ccgImportables,
                                             final NhsOutcomesFrameworkImportables nhsOutcomesFrameworkImportables,
@@ -63,7 +63,7 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
                                             final TaxonomyMigrator taxonomyMigrator) {
 
         this.executionParameters = executionParameters;
-        this.nesstarImportableItemsFactory = nesstarImportableItemsFactory;
+        this.clinicalIndicatorsImportableItemsFactory = clinicalIndicatorsImportableItemsFactory;
         this.socialCareImportables = socialCareImportables;
         this.ccgImportables = ccgImportables;
         this.nhsOutcomesFrameworkImportables = nhsOutcomesFrameworkImportables;
@@ -217,27 +217,27 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
         // separating them from Statistical Publications.
         // Expected CMS path: Corporate Website/Publications System/Clinical Indicators
 
-        final Folder rootClinicalIndicatorsFolder = nesstarImportableItemsFactory.toFolder(
+        final CiFolder rootCiFolder = clinicalIndicatorsImportableItemsFactory.toFolder(
             null, catalogStructure.findCatalogByLabel(ROOT_CATALOG_LABEL)
         );
-        rootClinicalIndicatorsFolder.setLocalizedName("Clinical Indicators");
-        rootClinicalIndicatorsFolder.setJcrNodeName("clinical-indicators");
+        rootCiFolder.setLocalizedName("Clinical Indicators");
+        rootCiFolder.setJcrNodeName("clinical-indicators");
 
-        importableItems.add(rootClinicalIndicatorsFolder);
+        importableItems.add(rootCiFolder);
 
         // Create individual sub-sections of Clinical Indicators
 
         importableItems.addAll(
-            ccgImportables.create(catalogStructure, rootClinicalIndicatorsFolder)
+            ccgImportables.create(catalogStructure, rootCiFolder)
         );
         importableItems.addAll(
-            socialCareImportables.create(catalogStructure, rootClinicalIndicatorsFolder)
+            socialCareImportables.create(catalogStructure, rootCiFolder)
         );
         importableItems.addAll(
-            nhsOutcomesFrameworkImportables.create(catalogStructure, rootClinicalIndicatorsFolder)
+            nhsOutcomesFrameworkImportables.create(catalogStructure, rootCiFolder)
         );
         importableItems.addAll(
-            compendiumImportables.create(datasetRepository, rootClinicalIndicatorsFolder, deliberatelyIgnoredPCodes)
+            compendiumImportables.create(datasetRepository, rootCiFolder, deliberatelyIgnoredPCodes)
         );
 
         // If we had any errors we will have nulls in the list, we have logged and output the errors already so just strip the nulls
@@ -353,16 +353,6 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
             throw new IllegalArgumentException(
                 "Field Mapping Import file does not exist: " + nesstarFieldMappingImportPath
             );
-        }
-    }
-
-    private void recreate(final Path dir) {
-        try {
-            FileUtils.deleteDirectory(dir.toFile());
-            Files.createDirectories(dir);
-
-        } catch (final IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 }

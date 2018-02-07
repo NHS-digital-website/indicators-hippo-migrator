@@ -15,7 +15,7 @@ import uk.nhs.digital.ps.migrator.model.nesstar.DataSetRepository;
 import uk.nhs.digital.ps.migrator.model.nesstar.PublishingPackage;
 import uk.nhs.digital.ps.migrator.report.IncidentType;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
-import uk.nhs.digital.ps.migrator.task.NesstarImportableItemsFactory;
+import uk.nhs.digital.ps.migrator.task.ClinicalIndicatorsImportableItemsFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,19 +35,19 @@ public class CompendiumImportables {
     private static final Pattern P_CODE_REGEX = Pattern.compile("P\\d+");
 
     private final ExecutionParameters executionParameters;
-    private final NesstarImportableItemsFactory factory;
+    private final ClinicalIndicatorsImportableItemsFactory factory;
     private final MigrationReport migrationReport;
 
     public CompendiumImportables(final ExecutionParameters executionParameters,
-                                 final NesstarImportableItemsFactory nesstarImportableItemsFactory,
+                                 final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory,
                                  final MigrationReport migrationReport) {
 
         this.executionParameters = executionParameters;
-        this.factory = nesstarImportableItemsFactory;
+        this.factory = clinicalIndicatorsImportableItemsFactory;
         this.migrationReport = migrationReport;
     }
 
-    public Collection<HippoImportableItem> create(final DataSetRepository dataSetRepository, final Folder ciRootFolder, final Set<String> deliberatelyIgnoredPCodes) {
+    public Collection<HippoImportableItem> create(final DataSetRepository dataSetRepository, final CiFolder ciRootFolder, final Set<String> deliberatelyIgnoredPCodes) {
 
         assertRequiredArgs(executionParameters.getNesstarCompendiumMappingFile());
 
@@ -71,17 +71,17 @@ public class CompendiumImportables {
         // K)        Dec 2016                                         PUBLICATION (to be created manually by editors)
 
         // A)
-        final Folder compendiumRootFolder = factory.newFolder(ciRootFolder, "Compendium of population health indicators");
+        final CiFolder compendiumRootFolder = factory.newFolder(ciRootFolder, "Compendium of population health indicators");
         importableItems.add(compendiumRootFolder);
 
         importablePrototypes.getSeriesPrototypes().forEach(seriesPrototype -> {
 
             // B)
-            final Folder seriesRootFolder = factory.newFolder(compendiumRootFolder, seriesPrototype.getName());
+            final CiFolder seriesRootFolder = factory.newFolder(compendiumRootFolder, seriesPrototype.getName());
             importableItems.add(seriesRootFolder);
 
             // C)
-            final Folder seriesCurrentFolder = factory.newFolder(seriesRootFolder, "Current");
+            final CiFolder seriesCurrentFolder = factory.newFolder(seriesRootFolder, "Current");
             importableItems.add(seriesCurrentFolder);
 
             // D)
@@ -94,7 +94,7 @@ public class CompendiumImportables {
             seriesPrototype.getPublicationPrototypes().forEach(publicationPrototype -> {
 
                 // E)
-                final Folder publicationFolder = factory.newFolder(seriesCurrentFolder, publicationPrototype.getName());
+                final CiFolder publicationFolder = factory.newFolder(seriesCurrentFolder, publicationPrototype.getName());
                 importableItems.add(publicationFolder);
 
                 // G)
@@ -120,13 +120,13 @@ public class CompendiumImportables {
             });
 
             // H)
-            final Folder archiveFolder = factory.newFolder(seriesRootFolder, "Archive");
+            final CiFolder archiveFolder = factory.newFolder(seriesRootFolder, "Archive");
             importableItems.add(archiveFolder);
 
             seriesPrototype.getPublicationPrototypes().forEach(publicationPrototype -> {
 
                 // I) - what used to be publication in 'Current', turns into a series in 'Archive'
-                final Folder seriesArchiveFolder = factory.newFolder(archiveFolder, publicationPrototype.getName());
+                final CiFolder seriesArchiveFolder = factory.newFolder(archiveFolder, publicationPrototype.getName());
                 importableItems.add(seriesArchiveFolder);
 
                 // J)
