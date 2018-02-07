@@ -21,15 +21,17 @@ public abstract class HippoImportableItem {
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     public static final String EMPTY_DATE = "0001-01-01T12:00:00.000Z";
 
-    private static final String ROOT_PATH_PREFIX = "/content/documents/corporate-website/publication-system";
+    protected static String ROOT_PATH_PREFIX = "/content/documents/corporate-website/";
 
-    protected final Folder parentFolder;
+    protected abstract String getRootPathPrefix();
+
+    protected final HippoImportableItem parentFolder;
 
     private String localizedName;
     private String jcrNodeName;
     private String jcrPath;
 
-    protected HippoImportableItem(final Folder parentFolder,
+    protected HippoImportableItem(final HippoImportableItem parentFolder,
                                   final String localizedName
     ) {
         this.parentFolder = parentFolder;
@@ -105,11 +107,11 @@ public abstract class HippoImportableItem {
 
         reverse(pathComponents);
 
-        this.jcrPath = pathComponents.stream().collect(joining("/", ROOT_PATH_PREFIX + "/", ""));
+        this.jcrPath = pathComponents.stream().collect(joining("/", getRootPathPrefix() + "/", ""));
     }
 
-    private void visitAncestorFolders(final Consumer<Folder> folderVisitor) {
-        for (Folder currentParent = this.parentFolder;
+    private void visitAncestorFolders(final Consumer<HippoImportableItem> folderVisitor) {
+        for (HippoImportableItem currentParent = this.parentFolder;
              currentParent != null;
              currentParent = currentParent.parentFolder) {
 

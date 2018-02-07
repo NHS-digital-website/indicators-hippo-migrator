@@ -3,12 +3,12 @@ package uk.nhs.digital.ps.migrator.task.importables;
 import static java.util.stream.Collectors.toList;
 
 import uk.nhs.digital.ps.migrator.model.hippo.Archive;
-import uk.nhs.digital.ps.migrator.model.hippo.Folder;
+import uk.nhs.digital.ps.migrator.model.hippo.CiFolder;
 import uk.nhs.digital.ps.migrator.model.hippo.HippoImportableItem;
 import uk.nhs.digital.ps.migrator.model.hippo.Publication;
 import uk.nhs.digital.ps.migrator.model.nesstar.Catalog;
 import uk.nhs.digital.ps.migrator.model.nesstar.CatalogStructure;
-import uk.nhs.digital.ps.migrator.task.NesstarImportableItemsFactory;
+import uk.nhs.digital.ps.migrator.task.ClinicalIndicatorsImportableItemsFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.stream.Stream;
 
 public class SocialCareImportables {
 
-    private final NesstarImportableItemsFactory nesstarImportableItemsFactory;
+    private final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory;
 
-    public SocialCareImportables(final NesstarImportableItemsFactory nesstarImportableItemsFactory) {
-        this.nesstarImportableItemsFactory = nesstarImportableItemsFactory;
+    public SocialCareImportables(final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory) {
+        this.clinicalIndicatorsImportableItemsFactory = clinicalIndicatorsImportableItemsFactory;
     }
 
-    public List<HippoImportableItem> create(final CatalogStructure catalogStructure, final Folder ciRootFolder) {
+    public List<HippoImportableItem> create(final CatalogStructure catalogStructure, final CiFolder ciRootFolder) {
 
         // Target CMS structure:
         //
@@ -37,40 +37,40 @@ public class SocialCareImportables {
 
         // A)
         final Catalog rootCatalog = catalogStructure.findCatalogByLabel("Adult Social Care Outcomes Framework (ASCOF)");
-        final Folder rootFolder = nesstarImportableItemsFactory.toFolder(ciRootFolder, rootCatalog);
+        final CiFolder rootFolder = clinicalIndicatorsImportableItemsFactory.toFolder(ciRootFolder, rootCatalog);
 
         // B)
-        final Folder currentPublicationFolder = nesstarImportableItemsFactory.newFolder(rootFolder, "Current");
+        final CiFolder currentPublicationFolder = clinicalIndicatorsImportableItemsFactory.newFolder(rootFolder, "Current");
 
         // D)
         final List<Catalog> domainCatalogs = rootCatalog.getChildCatalogs();
 
         final List<HippoImportableItem> domainsWithDatasets = domainCatalogs.stream()
             .flatMap(domainCatalog -> {
-                final Folder domainFolder = nesstarImportableItemsFactory.toFolder(currentPublicationFolder, domainCatalog);
+                final CiFolder domainFolder = clinicalIndicatorsImportableItemsFactory.toFolder(currentPublicationFolder, domainCatalog);
 
                 return Stream.concat(
                     Stream.of(domainFolder),
                     // E)
                     domainCatalog.findPublishingPackages().stream().map(domainPublishingPackage ->
-                        nesstarImportableItemsFactory.toDataSet(domainFolder, domainPublishingPackage)
+                        clinicalIndicatorsImportableItemsFactory.toDataSet(domainFolder, domainPublishingPackage)
                     )
                 );
 
             }).collect(toList());
 
         // C)
-        final Publication currentPublication = nesstarImportableItemsFactory.newPublication(
+        final Publication currentPublication = clinicalIndicatorsImportableItemsFactory.newPublication(
             currentPublicationFolder,
             "content",
             rootFolder.getLocalizedName(),
             domainsWithDatasets);
 
         // F)
-        final Folder archiveFolder = nesstarImportableItemsFactory.newFolder(rootFolder, "Archive");
+        final CiFolder archiveFolder = clinicalIndicatorsImportableItemsFactory.newFolder(rootFolder, "Archive");
 
         // G
-        final Archive archive = nesstarImportableItemsFactory.newArchive(archiveFolder, rootFolder.getLocalizedName());
+        final Archive archive = clinicalIndicatorsImportableItemsFactory.newArchive(archiveFolder, rootFolder.getLocalizedName());
 
         final List<HippoImportableItem> importableItems = new ArrayList<>();
         importableItems.add(rootFolder);

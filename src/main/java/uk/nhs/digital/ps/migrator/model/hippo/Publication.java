@@ -1,12 +1,12 @@
 package uk.nhs.digital.ps.migrator.model.hippo;
 
-public class Publication extends HippoImportableItem {
+public class Publication extends NesstarHippoImportableItem {
 
     private final String title;
     private final String informationType;
     private final String nominalDate;
 
-    public Publication(final Folder parent,
+    public Publication(final CiFolder parent,
                        final String name,
                        final String title,
                        final String informationType,

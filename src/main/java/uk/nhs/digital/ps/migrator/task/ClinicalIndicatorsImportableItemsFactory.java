@@ -27,9 +27,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public class NesstarImportableItemsFactory {
+public class ClinicalIndicatorsImportableItemsFactory {
 
-    private final static Logger log = getLogger(NesstarImportableItemsFactory.class);
+    private final static Logger log = getLogger(ClinicalIndicatorsImportableItemsFactory.class);
 
     private static final String DATE_FIELD_NOMINAL_DATE = "Nominal Date";
     private static final String DATE_FIELD_NEXT_PUBLICATION_DATE = "Next Publication Date";
@@ -40,17 +40,17 @@ public class NesstarImportableItemsFactory {
     private final TaxonomyMigrator taxonomyMigrator;
     private final MappedFieldsImporter mappedFieldsImporter;
 
-    public NesstarImportableItemsFactory(final ExecutionParameters executionParameters,
-                                  final MigrationReport migrationReport,
-                                  final TaxonomyMigrator taxonomyMigrator,
-                                  final MappedFieldsImporter mappedFieldsImporter) {
+    public ClinicalIndicatorsImportableItemsFactory(final ExecutionParameters executionParameters,
+                                                    final MigrationReport migrationReport,
+                                                    final TaxonomyMigrator taxonomyMigrator,
+                                                    final MappedFieldsImporter mappedFieldsImporter) {
         this.executionParameters = executionParameters;
         this.migrationReport = migrationReport;
         this.taxonomyMigrator = taxonomyMigrator;
         this.mappedFieldsImporter = mappedFieldsImporter;
     }
 
-    public Archive newArchive(final Folder parentFolder, final String name) {
+    public Archive newArchive(final CiFolder parentFolder, final String name) {
         String title = "Archived " + name;
         String summary = title + "\\n\\nNo archive content is currently available. This will be updated in due course.";
         return new Archive(
@@ -60,7 +60,7 @@ public class NesstarImportableItemsFactory {
             summary);
     }
 
-    public Series newSeries(final Folder parentFolder, final String title, final String summary) {
+    public Series newSeries(final CiFolder parentFolder, final String title, final String summary) {
 
         return new Series(
             parentFolder,
@@ -69,15 +69,15 @@ public class NesstarImportableItemsFactory {
             summary);
     }
 
-    public Folder toFolder(final Folder parentFolder, final Catalog catalog) {
+    public CiFolder toFolder(final CiFolder parentFolder, final Catalog catalog) {
 
-        return new Folder(
+        return new CiFolder(
             parentFolder,
             catalog.getLabel()
         );
     }
 
-    public DataSet toDataSet(final Folder parentFolder, final PublishingPackage exportedPublishingPackage) {
+    public DataSet toDataSet(final CiFolder parentFolder, final PublishingPackage exportedPublishingPackage) {
 
         final String pCode = exportedPublishingPackage.getUniqueIdentifier();
 
@@ -134,14 +134,14 @@ public class NesstarImportableItemsFactory {
         }
     }
 
-    public Folder newFolder(final Folder parentFolder, final String name) {
-        return new Folder(
+    public CiFolder newFolder(final CiFolder parentFolder, final String name) {
+        return new CiFolder(
             parentFolder,
             name
         );
     }
 
-    public Publication newPublication(final Folder parentFolder, final String name, final String title, final List<HippoImportableItem> childItems) {
+    public Publication newPublication(final CiFolder parentFolder, final String name, final String title, final List<HippoImportableItem> childItems) {
         return new Publication(
             parentFolder,
             name,
@@ -233,7 +233,7 @@ public class NesstarImportableItemsFactory {
             .collect(toList());
     }
 
-    private boolean isWithinCompendiumStructure(final Folder folder) {
+    private boolean isWithinCompendiumStructure(final CiFolder folder) {
         return folder.getJcrPath().contains("compendium-of-population-health-indicators");
     }
 

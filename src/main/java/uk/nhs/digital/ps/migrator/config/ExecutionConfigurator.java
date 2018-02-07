@@ -39,6 +39,8 @@ public class ExecutionConfigurator {
     private static final String REPORTS_DIR_NAME = "reports";
     private static final String MIGRATION_REPORT_FILENAME_DEFAULT = "Clinical Indicators Migration Report {TIMESTAMP}.xlsx";
 
+    private static final String NATIONAL_INDICATORS_IMPORT_PATH = "nationalIndicatorImportPath";
+
     private final ExecutionParameters executionParameters;
 
     public ExecutionConfigurator(final ExecutionParameters executionParameters) {
@@ -61,6 +63,8 @@ public class ExecutionConfigurator {
         executionParameters.setTaxonomyMappingImportPath(getPathArg(args, TAXONOMY_MAPPING_IMPORT_PATH));
 
         executionParameters.setNesstarFieldMappingImportPath(getPathArg(args, NESSTAR_FIELD_MAPPING_IMPORT_PATH));
+
+        executionParameters.setNationalIndicatorImportPath(getPathArg(args, NATIONAL_INDICATORS_IMPORT_PATH));
 
         initNesstarUnzippedArchiveDir();
         initMigrationReportOutputPath(args);
@@ -166,7 +170,13 @@ public class ExecutionConfigurator {
                 "Path to field mapping spreadsheet used to map migrated datasets' P code to " +
                     "Coverage Start, Coverage End, Geographic Coverage, Granularity." +
                     " Required if --" + NESSTAR_CONVERT_FLAG + " is specified."
-            )
+            ),
+            describe(
+                NATIONAL_INDICATORS_IMPORT_PATH,
+                "Path to the spreadsheet that contains the national indicators we want to import into hippo. Required for national indicator imports, optional otherwise. " +
+                "NOT to be used together with arguments that trigger other conversions (e.g. Nesstar); " + 
+                "this is to prevent the tasks inadvertently deleting each other's output as they drop and recreate the output directory."
+            )            
         );
     }
 

@@ -2,7 +2,7 @@ package uk.nhs.digital.ps.migrator.model.hippo;
 
 import java.util.*;
 
-public class DataSet extends HippoImportableItem {
+public class DataSet extends NesstarHippoImportableItem {
 
     private final String pCode;
     private final String title;
@@ -17,7 +17,7 @@ public class DataSet extends HippoImportableItem {
     private final String geographicCoverage;
     private final String granularity;
 
-    public DataSet(final Folder parentFolder,
+    public DataSet(final CiFolder parentFolder,
                    final String pCode,
                    final String name,
                    final String title,

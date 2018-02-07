@@ -3,12 +3,12 @@ package uk.nhs.digital.ps.migrator.task.importables;
 import static java.util.stream.Collectors.toList;
 
 import uk.nhs.digital.ps.migrator.model.hippo.Archive;
-import uk.nhs.digital.ps.migrator.model.hippo.Folder;
+import uk.nhs.digital.ps.migrator.model.hippo.CiFolder;
 import uk.nhs.digital.ps.migrator.model.hippo.HippoImportableItem;
 import uk.nhs.digital.ps.migrator.model.hippo.Publication;
 import uk.nhs.digital.ps.migrator.model.nesstar.Catalog;
 import uk.nhs.digital.ps.migrator.model.nesstar.CatalogStructure;
-import uk.nhs.digital.ps.migrator.task.NesstarImportableItemsFactory;
+import uk.nhs.digital.ps.migrator.task.ClinicalIndicatorsImportableItemsFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.stream.Stream;
 
 public class CcgImportables {
 
-    private final NesstarImportableItemsFactory nesstarImportableItemsFactory;
+    private final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory;
 
-    public CcgImportables(final NesstarImportableItemsFactory nesstarImportableItemsFactory) {
-        this.nesstarImportableItemsFactory = nesstarImportableItemsFactory;
+    public CcgImportables(final ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory) {
+        this.clinicalIndicatorsImportableItemsFactory = clinicalIndicatorsImportableItemsFactory;
     }
 
-    public List<HippoImportableItem> create(final CatalogStructure catalogStructure, final Folder ciRootFolder) {
+    public List<HippoImportableItem> create(final CatalogStructure catalogStructure, final CiFolder ciRootFolder) {
 
         // Target CMS structure:
         //
@@ -37,10 +37,10 @@ public class CcgImportables {
 
         // A)
         final Catalog ccgRootCatalog = catalogStructure.findCatalogByLabel("CCG Outcomes Indicator Set");
-        final Folder ccgRootFolder = nesstarImportableItemsFactory.toFolder(ciRootFolder, ccgRootCatalog);
+        final CiFolder ccgRootFolder = clinicalIndicatorsImportableItemsFactory.toFolder(ciRootFolder, ccgRootCatalog);
 
         // B)
-        final Folder currentPublicationFolder = nesstarImportableItemsFactory.newFolder(ccgRootFolder, "Current");
+        final CiFolder currentPublicationFolder = clinicalIndicatorsImportableItemsFactory.newFolder(ccgRootFolder, "Current");
 
 
         // D)
@@ -49,30 +49,30 @@ public class CcgImportables {
 
         final List<HippoImportableItem> domainsWithDatasets = domainCatalogs.stream()
             .flatMap(domainCatalog -> {
-                final Folder domainFolder = nesstarImportableItemsFactory.toFolder(currentPublicationFolder, domainCatalog);
+                final CiFolder domainFolder = clinicalIndicatorsImportableItemsFactory.toFolder(currentPublicationFolder, domainCatalog);
 
                 return Stream.concat(
                     Stream.of(domainFolder),
                     // E)
                     domainCatalog.findPublishingPackages().stream().map(domainPublishingPackage ->
-                        nesstarImportableItemsFactory.toDataSet(domainFolder, domainPublishingPackage)
+                        clinicalIndicatorsImportableItemsFactory.toDataSet(domainFolder, domainPublishingPackage)
                     )
                 );
 
             }).collect(toList());
 
         // C)
-        final Publication currentPublication = nesstarImportableItemsFactory.newPublication(
+        final Publication currentPublication = clinicalIndicatorsImportableItemsFactory.newPublication(
             currentPublicationFolder,
             "content",
             ccgRootFolder.getLocalizedName(),
             domainsWithDatasets);
 
         // F)
-        final Folder archiveFolder = nesstarImportableItemsFactory.newFolder(ccgRootFolder, "Archive");
+        final CiFolder archiveFolder = clinicalIndicatorsImportableItemsFactory.newFolder(ccgRootFolder, "Archive");
 
         // G
-        final Archive archive = nesstarImportableItemsFactory.newArchive(archiveFolder, ccgRootFolder.getLocalizedName());
+        final Archive archive = clinicalIndicatorsImportableItemsFactory.newArchive(archiveFolder, ccgRootFolder.getLocalizedName());
 
         final List<HippoImportableItem> importableItems = new ArrayList<>();
         importableItems.add(ccgRootFolder);

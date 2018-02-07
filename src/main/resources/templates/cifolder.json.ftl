@@ -1,23 +1,23 @@
-<#-- @ftlvariable name="folder" type="uk.nhs.digital.ps.migrator.model.hippo.Folder" -->
+<#-- @ftlvariable name="cifolder" type="uk.nhs.digital.ps.migrator.model.hippo.CiFolder" -->
 {
-  "name" : "${folder.jcrNodeName}",
+  "name" : "${cifolder.jcrNodeName}",
   "primaryType" : "hippostd:folder",
   "mixinTypes" : [ "hippotranslation:translated", "mix:versionable", "hippo:named" ],
   "properties" : [ {
     "name" : "jcr:path",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${folder.jcrPath}" ]
+    "values" : [ "${cifolder.jcrPath}" ]
   }, {
     "name" : "jcr:localizedName",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${folder.localizedName}" ]
+    "values" : [ "${cifolder.localizedName}" ]
   }, {
     "name" : "hippo:name",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${folder.localizedName}" ]
+    "values" : [ "${cifolder.localizedName}" ]
   }, {
     "name" : "hippostd:foldertype",
     "type" : "STRING",

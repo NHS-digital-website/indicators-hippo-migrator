@@ -21,21 +21,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(DataProviderRunner.class)
-public class NesstarImportableItemsFactoryTest {
+public class ClinicalIndicatorsImportableItemsFactoryTest {
 
 
     @Mock ExecutionParameters executionParameters;
     @Mock MigrationReport migrationReport;
     @Mock TaxonomyMigrator taxonomyMigrator;
 
-    private NesstarImportableItemsFactory nesstarImportableItemsFactory;
+    private ClinicalIndicatorsImportableItemsFactory clinicalIndicatorsImportableItemsFactory;
 
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
 
-        nesstarImportableItemsFactory = new NesstarImportableItemsFactory(executionParameters, migrationReport, taxonomyMigrator, null);
+        clinicalIndicatorsImportableItemsFactory = new ClinicalIndicatorsImportableItemsFactory(executionParameters, migrationReport, taxonomyMigrator, null);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class NesstarImportableItemsFactoryTest {
         final String pCode = "aTestPCodeValue";
 
         // when
-        nesstarImportableItemsFactory.formatDatasetSummary(summaryWithHtmlMarkup, null, pCode);
+        clinicalIndicatorsImportableItemsFactory.formatDatasetSummary(summaryWithHtmlMarkup, null, pCode);
 
         // then
         verify(migrationReport).report(pCode, IncidentType.HTML_IN_SUMMARY, summaryWithHtmlMarkup);
@@ -61,7 +61,7 @@ public class NesstarImportableItemsFactoryTest {
         final String expectedSummary = testData[1];
 
         // when
-        final String actualSummary = nesstarImportableItemsFactory.formatDatasetSummary(inputSummary, null, "aTestPCode");
+        final String actualSummary = clinicalIndicatorsImportableItemsFactory.formatDatasetSummary(inputSummary, null, "aTestPCode");
 
         // then
         assertThat("Summary is formatted correctly", actualSummary, startsWith(expectedSummary));

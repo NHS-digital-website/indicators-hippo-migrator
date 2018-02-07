@@ -1,11 +1,11 @@
 package uk.nhs.digital.ps.migrator.model.hippo;
 
-public class Archive extends HippoImportableItem {
+public class Archive extends NesstarHippoImportableItem {
 
     private final String title;
     private final String summary;
 
-    public Archive(final Folder parentFolder,
+    public Archive(final CiFolder parentFolder,
                    final String cmsNodeDisplayName,
                    final String title,
                    final String summary) {
