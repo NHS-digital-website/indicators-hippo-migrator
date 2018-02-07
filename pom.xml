@@ -6,7 +6,7 @@
 
     <groupId>uk.nhs.digital</groupId>
     <artifactId>publication-system-migrator</artifactId>
-    <version>${revision}</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <name>NHS Digital Publication System CMS Migrator</name>
     <description>NHS Digital Publication System CMS Migrator</description>

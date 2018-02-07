@@ -20,8 +20,8 @@ In the first phase (executed locally):
 * Using CMS and [Console] existing data (Taxonomy and the folder(s) expected to be created as part of the import) are
   taken offline (un-published) and deleted so that there are no conflicts with imported data - the process is not
   designed to support updates/patching; it requires 'clean slate' conditions.
-* Custom [Updater Editor] Groovy [import script] (using [EXIM] interface) is used to read those JSON files to create
-  actual folders and documents in a local CMS.
+* Custom [Updater Editor] Groovy [import script] (part of the main project, uses [EXIM] interface) is used to read those
+  JSON files to create actual folders and documents in a local CMS.
 * Migration report generated in the first step, the locally imported data, and the application logs are reviewed to
   determine whether the conversion and import were successful and whether it's okay to proceed with the the import on
   the server(s).
@@ -42,7 +42,7 @@ useful during development as it offers the shorterst 'make a change -> see its e
 To excute it as a Maven plugin, within terminal window navigate to the root directory of the project (parent directory
 of this module) and execute:
 ```bash
-mvn -f migrator/pom.xml spring-boot:run
+mvn spring-boot:run
 ```
 This will assemble and execute the application which will display short usage info and quit. Only when options mentioned
 in the info are specified, will the application actually try to perform some actions. When running the Migrator via
@@ -50,14 +50,14 @@ in the info are specified, will the application actually try to perform some act
 `-Drun.arguments=`; for example, to have the application decompress Nesstar ZIP export file and generate
 Hippo-consumable files, one would execute:
 ```bash
-mvn -f migrator/pom.xml spring-boot:run -Drun.arguments="--nesstarUnzipFrom=/tmp/MigrationPackage_2017_09_12_1706.zip,--nesstarConvert"
+mvn spring-boot:run -Drun.arguments="--nesstarUnzipFrom=/tmp/MigrationPackage_2017_09_12_1706.zip,--nesstarConvert"
 ```
 
 ### As a JAR file
 In order to run the application as a standalone JAR, first you need to generate it; the following will generate JAR file
 under module's `target` directory:
 ```bash
-mvn -f migrator/pom.xml package
+mvn package
 ```
 Then you can run it as a normal Java application. To do so, from the directory where the JAR file exists, execute:
 ```bash
@@ -204,6 +204,6 @@ For orientation, the following approximate timings were observed during import o
 [EXIM]:                         https://onehippo-forge.github.io/content-export-import/index.html
 [Updater Editor]:               https://www.onehippo.org/library/concepts/update/using-the-updater-editor.html
 [Groovy]:                       http://groovy-lang.org/
-[import script]:                ../repository-data/application/src/main/resources/hcm-config/configuration/update/MigratorImporterScript.groovy
+[import script]:                https://github.com/NHS-digital-website/hippo/blob/master/repository-data/application/src/main/resources/hcm-config/configuration/update/MigratorImporterScript.groovy
 [Console]:                      https://www.onehippo.org/library/concepts/content-repository/using-the-console.html
 [structure mapping]:            https://confluence.digital.nhs.uk/display/CW/Structure+Mapping
