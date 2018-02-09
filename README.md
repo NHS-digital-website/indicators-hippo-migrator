@@ -3,11 +3,26 @@
 The new, Hippo CMS based publication system requires that data from legacy systems is transferred into it and made
 available from the go-live.
 
-At the moment of writing, there are two such systems - NHS Digital [Clinical Indicators portal] and [GOSS]-based legacy
-Publications System.
+At the moment of writing, there are three such systems:
+* NHS Digital [Clinical Indicators portal].
+* Content making up National Indicator Library spread around various sources.
+* [GOSS]-based legacy Publications System.
 
-This module implements a [Spring Boot]-based command line application used to convert export files generated from these
-legacy systems into a format understood by [EXIM] (Hippo import/export interface).
+This project implements a [Spring Boot]-based command line application used to convert content of the first two
+legacy systems into a format understood by [EXIM] (Hippo import/export interface). Content of the third system is
+addressed by a separate, [dedicated migrator application][goss-hippo-migrator]. 
+
+## Development
+If this is your first contact with this project, having checked `master` branch out, execute `make init`. This only
+needs to be done once and it configures your local repo for git.
+
+Before you make a pull request, make sure to:
+* Have all your individual commits squashed into one.
+* Have your branch rebased onto latest master.
+* Have first line of the commit's comment reference the JIRA story that given commit pertains to; make the like follow
+  the format `RPS-123 shortened story title here` and not exceed 60 characters.
+* Optionally, follow the first line with one blank line and a summary of the changes covered by the commit. Individual
+  lines of the summary should not be longer than 72 characters.         
 
 ## Migration Process Overview
 At a high-level, the migration process happens in two phases; one executed on local machine and one executed on the
@@ -73,9 +88,9 @@ Individual steps of the conversion can be toggled on and off, depending on param
 allow for execution of just selected steps during development of the Migrator in order to speed up the development
 cycle.
 
-As this resulted in a considerable number of parameters required to be defined, for convenience, the following provides
-an example of a command line with a complete list of arguments required to execute all steps of the conversion in one
-go:
+As, in the case of Clinical Indicators content this resulted in a considerable number of parameters required to be
+defined, for convenience, the following provides an example of a command line with a complete list of arguments required
+to execute all steps of the conversion in one go:
 ```bash
 java -jar publication-system-migrator.jar \
 --nesstarUnzipFrom=/home/dev/migration/MigrationPackage_2018_01_15_1354.zip,\
@@ -133,27 +148,26 @@ file as not all exceptions bubble up to the editor's log.
 
 ### Exporting via XML Export
 
-At the moment of writing (2018-01-29) data that needs exporting from local system is Taxonomy and Clinical Indicators.
+At the moment of writing (2018-02-09) data that needs exporting from local system is Taxonomy, Clinical Indicators and
+National Indicator Library.
 Given that only a single node can be selected in the Console, these need to be exported as two, separate ZIP files:
 * Taxonomy: `/content/taxonomies/publication_taxonomy`
 * Clinical Indicators: `/content/documents/corporate-website/publication-system/clinical-indicators`
+* National Indicator Library: `/content/documents/corporate-website/national-indicator-library`
 
 ### Removing existing, conflicting data prior to import
 The import process has NOT been designed to cope with conflicts where documents or folders exist in the target
 system with JCR paths matching those of newly imported items. Should the import be attempted where such path
 conflicts occur, the behaviour and the end result is undefined.
 
-Given that the import is planned to be a one-off activity, executed shortly before go-live in a 'blank' system
-with no pre-existing data, it's not expected that such conflicts would occur in production. Having said that,
-in case of a test system, it's expected that the import would take place several times. In such a scenario
-it's best to remove conflicting, pre-existing data from the system prior to re-importing it (note that there
-is no need to remove data that does not conflict with the imported one).
+Where such conflicting content exists in the target system it's best to remove it, prior to re-importing it (note that
+there is no need to remove data that does not conflict with the imported one).
 
-At the moment of writing (2018-01-29) such conflicting data is Taxonomy and Clinical Indicators. In order to remove
-them prior to re-importing:
-1. Take offline (un-publish) and then delete Taxonomy in CMS,
-1. Take offline entire content of folder `Corporate Website > Publication System > Clinical Indicators` in CMS,
-1. Delete node `/content/documents/corporate-website/publication-system/clinical-indicators` in Console.
+To remove Taxonomy, take offline (un-publish) and then delete Taxonomy in CMS.
+
+To remove Clinical Indicators or National Indicator Library content: 
+1. take offline entire content of their respective folders in CMS,
+1. delete their top-most nodes in Console.
 
 Note that if the size of the data 'covered' by the node deleted in the last step, Console starts misbehaving in
 that, for a while, certain nodes can stop expanding or collapsing. After some time (10-20min) Console should
@@ -168,9 +182,10 @@ to first import Taxonomy.
 
 As the export files define paths relative to the parents of the nodes selected to be exported, ensure that you
 imort them into corresponding parent nodes, that is execute 'XML Import' from context menu opened by right-clicking
-the following nodes:
+the following nodes (accurate at the moment of writing on 2018-02-09):
 * For Taxonomy: `/content/taxonomies`
 * For Clinical Indicators: `/content/documents/corporate-website/publication-system`
+* For National Indicator Library: `/content/documents/corporate-website`
 
 Selecting 'XML Import' opens a modal dialogue. Before completing it:
 * Double check that it shows 'Import path' as described above,
@@ -207,3 +222,4 @@ For orientation, the following approximate timings were observed during import o
 [import script]:                https://github.com/NHS-digital-website/hippo/blob/master/repository-data/application/src/main/resources/hcm-config/configuration/update/MigratorImporterScript.groovy
 [Console]:                      https://www.onehippo.org/library/concepts/content-repository/using-the-console.html
 [structure mapping]:            https://confluence.digital.nhs.uk/display/CW/Structure+Mapping
+[goss-hippo-migrator]:          https://github.com/NHS-digital-website/goss-hippo-migrator
