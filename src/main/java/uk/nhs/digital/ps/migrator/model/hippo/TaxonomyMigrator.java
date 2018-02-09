@@ -24,7 +24,7 @@ import java.util.stream.StreamSupport;
  * This class is responsible for providing the taxonomy definition that we are going
  * to import into hippo and a mapping to those terms from existing P Codes.
  */
-public class TaxonomyMigrator extends BaseXlsReader {
+public class TaxonomyMigrator {
 
     private static final String TAXONOMY_ROOT_NODE_NAME = "publication_taxonomy";
     private static final String TAXONOMY_DEFINITION_COLUMN = "concept";
@@ -36,14 +36,16 @@ public class TaxonomyMigrator extends BaseXlsReader {
 
     private MigrationReport migrationReport;
     private ExecutionParameters executionParameters;
+    private XlsxReader xlsxReader;
 
     private Set<String> taxonomyKeys;
     private Map<String, List<String>> taxonomyMapping;
     private TaxonomyTerm taxonomyDefinition;
 
-    public TaxonomyMigrator(MigrationReport migrationReport, ExecutionParameters executionParameters) {
+    public TaxonomyMigrator(MigrationReport migrationReport, ExecutionParameters executionParameters, XlsxReader xlsReader) {
         this.migrationReport = migrationReport;
         this.executionParameters = executionParameters;
+        this.xlsxReader = xlsReader;
     }
 
     public void init() {
@@ -93,10 +95,10 @@ public class TaxonomyMigrator extends BaseXlsReader {
             return;
         }
 
-        Iterator<Row> rowIterator = getRowIterator(taxonomyMappingImportPath, TAXONOMY_MAPPING_SHEET_NAME);
+        Iterator<Row> rowIterator = this.xlsxReader.getRowIterator(taxonomyMappingImportPath, TAXONOMY_MAPPING_SHEET_NAME);
 
         Row headerRow = rowIterator.next();
-        List<Integer> pCodeCols = streamRow(headerRow)
+        List<Integer> pCodeCols = this.xlsxReader.streamRow(headerRow)
             .filter(cell -> cell.getStringCellValue().equals(P_CODE_COLUMN))
             .map(Cell::getColumnIndex)
             .collect(toList());
@@ -107,7 +109,7 @@ public class TaxonomyMigrator extends BaseXlsReader {
 
         int pCodeCol = pCodeCols.get(0);
 
-        List<Integer> taxonomyColumnIndexes = streamRow(headerRow)
+        List<Integer> taxonomyColumnIndexes = this.xlsxReader.streamRow(headerRow)
             .filter(cell -> cell.getStringCellValue().startsWith(TAXONOMY_MAPPING_COLUMN_PREFIX))
             .map(Cell::getColumnIndex)
             .collect(toList());
@@ -119,7 +121,7 @@ public class TaxonomyMigrator extends BaseXlsReader {
 
             String pCode = row.getCell(pCodeCol).getStringCellValue().trim();
 
-            List<String> taxonomyKeys = streamRow(row)
+            List<String> taxonomyKeys = this.xlsxReader.streamRow(row)
                 .filter(c -> taxonomyColumnIndexes.contains(c.getColumnIndex()))
                 .map(Cell::getStringCellValue)
                 .map(TaxonomyTerm::covertTermToKey)
@@ -135,11 +137,11 @@ public class TaxonomyMigrator extends BaseXlsReader {
 
     private void readTaxonomyDefinition() {
 
-        Iterator<Row> rowIterator = getRowIterator(executionParameters.getTaxonomyDefinitionImportPath(), TAXONOMY_DEFINITION_SHEET_NAME);
+        Iterator<Row> rowIterator = this.xlsxReader.getRowIterator(executionParameters.getTaxonomyDefinitionImportPath(), TAXONOMY_DEFINITION_SHEET_NAME);
 
         // Which column headers are for the taxonomy terms that we are interested in
         Row headerRow = rowIterator.next();
-        List<Integer> taxonomyColumnIndexes = streamRow(headerRow)
+        List<Integer> taxonomyColumnIndexes = this.xlsxReader.streamRow(headerRow)
             .filter(cell -> TAXONOMY_DEFINITION_COLUMN.equals(cell.getStringCellValue()))
             .map(Cell::getColumnIndex)
             .collect(Collectors.toList());
@@ -161,7 +163,7 @@ public class TaxonomyMigrator extends BaseXlsReader {
 
         while (rowIterator.hasNext()) {
             // Get the cell that has taxonomy term in it
-            List<Cell> cells = streamRow(rowIterator.next())
+            List<Cell> cells = this.xlsxReader.streamRow(rowIterator.next())
                 .filter(c -> taxonomyColumnIndexes.contains(c.getColumnIndex()))
                 .filter(c -> !c.getStringCellValue().isEmpty())
                 .collect(Collectors.toList());

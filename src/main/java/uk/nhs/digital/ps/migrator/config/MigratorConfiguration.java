@@ -4,9 +4,11 @@ import static java.util.Arrays.asList;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import uk.nhs.digital.ps.migrator.model.hippo.MappedFieldsImporter;
 import uk.nhs.digital.ps.migrator.model.hippo.NationalIndicatorMigrator;
 import uk.nhs.digital.ps.migrator.model.hippo.TaxonomyMigrator;
+import uk.nhs.digital.ps.migrator.model.hippo.XlsxReader;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
 import uk.nhs.digital.ps.migrator.task.*;
 import uk.nhs.digital.ps.migrator.task.importables.CcgImportables;
@@ -106,8 +108,9 @@ public class MigratorConfiguration {
 
     @Bean
     public TaxonomyMigrator taxonomyMigrator(final MigrationReport migrationReport,
-                                             final ExecutionParameters executionParameters) {
-        return new TaxonomyMigrator(migrationReport, executionParameters);
+                                             final ExecutionParameters executionParameters,
+                                             final XlsxReader xslReader) {
+        return new TaxonomyMigrator(migrationReport, executionParameters, xslReader);
     }
 
     @Bean
@@ -117,7 +120,13 @@ public class MigratorConfiguration {
     }
 
     @Bean
-    public NationalIndicatorMigrator indicatorMigrator(final ExecutionParameters executionParameters) {
-        return new NationalIndicatorMigrator(executionParameters);
+    public NationalIndicatorMigrator indicatorMigrator(final ExecutionParameters executionParameters, final XlsxReader xslReader) {
+        return new NationalIndicatorMigrator(executionParameters, xslReader);
+    }        
+
+    @Bean
+    @Scope("prototype")
+    public XlsxReader xslReader() {
+        return new XlsxReader();
     }        
 }
