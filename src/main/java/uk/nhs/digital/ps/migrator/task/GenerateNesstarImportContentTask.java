@@ -9,7 +9,6 @@ import uk.nhs.digital.ps.migrator.model.nesstar.Catalog;
 import uk.nhs.digital.ps.migrator.model.nesstar.CatalogStructure;
 import uk.nhs.digital.ps.migrator.model.nesstar.DataSetRepository;
 import uk.nhs.digital.ps.migrator.model.nesstar.PublishingPackage;
-import uk.nhs.digital.ps.migrator.report.IncidentType;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
 import uk.nhs.digital.ps.migrator.task.importables.CcgImportables;
 import uk.nhs.digital.ps.migrator.task.importables.CompendiumImportables;
@@ -29,8 +28,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.*;
 import static uk.nhs.digital.ps.migrator.misc.FileHelper.recreate;
 import static uk.nhs.digital.ps.migrator.misc.XmlHelper.loadFromXml;
-import static uk.nhs.digital.ps.migrator.report.IncidentType.DUPLICATE_PCODE_IMPORTED;
-import static uk.nhs.digital.ps.migrator.report.IncidentType.NO_DATASET_MAPPING;
+import static uk.nhs.digital.ps.migrator.report.IncidentType.*;
 
 public class GenerateNesstarImportContentTask implements MigrationTask {
 
@@ -133,6 +131,8 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
 
         reportDuplicatePCodes(importableItems);
 
+        sanitiseDatasetPaths(importableItems);
+
         reportDuplicateDatasetPaths(importableItems);
 
         reportDuplicateNonDatasetPaths(importableItems);
@@ -152,6 +152,41 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
             .forEach(pCode -> migrationReport.report(pCode, DUPLICATE_PCODE_IMPORTED));
     }
 
+    /**
+     * Post-processes Dataset paths.
+     */
+    private void sanitiseDatasetPaths(final List<HippoImportableItem> importableItems) {
+
+
+        // Some paths are known to be duplicates, due to dataset in the same location sharing titles
+        // that are similar enough that their normalisation yields the same node names.
+        //
+        // If not dealt with, such paths would result in second of the duplicate nodes overwriting the first one.
+        // A few distinct datasets are known to share the same 'raw' paths but all are needed to be imported
+        // so we're applying some suffixes to their node names to make them unique.
+        final Map<String, String> pCodeToSuffix = new HashMap<String, String>() {{
+            // Suffix values that correspond to the indicators covered by the known datasets.
+            put("P00441", "04h-085crp2");
+            put("P00442", "04h-085crp3");
+            put("P00443", "04h-085crp4");
+            put("P00444", "04h-085crp5");
+        }};
+
+        importableItems.stream()
+                .filter(DataSet.class::isInstance)
+                .map(hippoImportableItem -> (DataSet) hippoImportableItem)
+                .filter(dataSet -> pCodeToSuffix.containsKey(dataSet.getPCode()))
+                .forEach(dataSet -> {
+                    final String suffix = pCodeToSuffix.get(dataSet.getPCode());
+                    final String originalJcrNodeName = dataSet.getJcrNodeName();
+                    final String newJcrNodeName = originalJcrNodeName.concat("-").concat(suffix);
+
+                    dataSet.setJcrNodeName(newJcrNodeName);
+
+                    migrationReport.report(dataSet.getPCode(), KNOWN_DUPLICATE_DATASET_PATH, dataSet.getJcrPath());
+                });
+    }
+
     private void reportDuplicateDatasetPaths(final List<HippoImportableItem> importableItems) {
 
         final Map<String, List<String>> pathsToPCodes = importableItems.stream()
@@ -169,7 +204,7 @@ public class GenerateNesstarImportContentTask implements MigrationTask {
 
             if (pCodes.size() > 1) {
                 pCodes.forEach(pCode -> {
-                    migrationReport.report(pCode, IncidentType.DUPLICATE_DATASET_PATH, path);
+                    migrationReport.report(pCode, DUPLICATE_DATASET_PATH, path);
                 });
             }
         });

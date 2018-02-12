@@ -22,7 +22,7 @@ public enum IncidentType {
             + "\nare needed."
     ),
     DATE_WITH_EXTRA_TEXT(
-        FIELD_MIGRATED_MODIFIED,
+            VALUE_MIGRATED_MODIFIED,
         "Date found with additional text",
         "Date field | Value found | Interpreted as",
         "Date in the exported data contained some extra text. The imported Dataset"
@@ -74,15 +74,28 @@ public enum IncidentType {
             + "\nA decision is needed on whether the summary can be migrated as is"
             + "\nor does it require some sanitizing."
     ),
+    KNOWN_DUPLICATE_DATASET_PATH(
+            VALUE_MIGRATED_MODIFIED,
+            "Known, non-unique Dataset path",
+            "Updated path",
+            "A known dataset had its node name updated so that its path could remain unique."
+                    + "\nThis is due to two datasets having been defined in the"
+                    + "\nsame location, having different P-codes but the same title. Normally,"
+                    + "\nthis would result in only one of the duplicates being imported, but,"
+                    + "\nin this case, all datasets need importing, and so their paths had to "
+                    + "\nbe made unique by being appended with unique suffixes."
+                    + "\n"
+                    + "\nThe dataset has been migrated with updated node name; nothing else to do."
+    ),
     DUPLICATE_DATASET_PATH(
-        ONE_DUPLICATE_DATASET_MIGRATED,
-        "Multiple datasets share the same path",
-        "Shared path",
-        "More than one dataset have been found to have the same CMS path."
-            + "\nThis is probably due to two Datasets having been defined in the"
-            + "\nsame location, having different P-codes but the same title"
-            + "\n"
-            + "\nOffending datasets need reviewing in the existing portal."
+            ONE_DUPLICATE_DATASET_MIGRATED,
+            "Multiple datasets share the same path",
+            "Shared path",
+            "More than one dataset have been found to have the same CMS path."
+                    + "\nThis is probably due to two Datasets having been defined in the"
+                    + "\nsame location, having different P-codes but the same title"
+                    + "\n"
+                    + "\nOffending datasets need reviewing in the existing portal."
     ),
     DUPLICATE_PCODE_IMPORTED( // found when scanning list of all the JSON files prepared for import
         FIELD_MIGRATED_AS_IS,
