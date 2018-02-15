@@ -22,6 +22,9 @@ public class ExecutionConfigurator {
     private static final String NESSTAR_ATTACHMENT_DOWNLOAD_FOLDER = "nesstarAttachmentDownloadFolder";
     private static final String NESSTAR_COMPENDIUM_MAPPING_FILE = "nesstarCompendiumMappingFile";
 
+    private static final String GENERATE_IMPORT_PACKAGE_FLAG = "generateImportPackage";
+    private static final String IMPORT_PACKAGE_DIR_NAME_DEFAULT = "import-package";
+
     private static final String HIPPO_IMPORT_DIR = "hippoImportDir";
 
     private static final String MIGRATION_REPORT_PATH = "migrationReport";
@@ -64,6 +67,8 @@ public class ExecutionConfigurator {
 
         executionParameters.setNesstarFieldMappingImportPath(getPathArg(args, NESSTAR_FIELD_MAPPING_IMPORT_PATH));
 
+        executionParameters.setGenerateImportPackage(args.containsOption(GENERATE_IMPORT_PACKAGE_FLAG));
+
         executionParameters.setNationalIndicatorImportPath(getPathArg(args, NATIONAL_INDICATORS_IMPORT_PATH));
 
         initNesstarUnzippedArchiveDir();
@@ -71,6 +76,12 @@ public class ExecutionConfigurator {
         initHippoImportDir(args);
         initDownloadDir(args);
         initTaxonomyDefinitionOutputPath(args);
+        initImportPackageDir();
+    }
+
+    private void initImportPackageDir() {
+        Path importPackageDirPath = Paths.get(MIGRATOR_TEMP_DIR_PATH.toString(), IMPORT_PACKAGE_DIR_NAME_DEFAULT);
+        executionParameters.setImportPackageDir(importPackageDirPath);
     }
 
     private void initHippoImportDir(final ApplicationArguments args) {
@@ -173,7 +184,7 @@ public class ExecutionConfigurator {
             ),
             describe(
                 NATIONAL_INDICATORS_IMPORT_PATH,
-                "Path to the spreadsheet that contains the national indicators we want to import into hippo. Required for national indicator imports, optional otherwise. " +
+                "Path to the spreadsheet that contains the national indicators we want to import into hippo. Required for national indicator imports. " +
                 "NOT to be used together with arguments that trigger other conversions (e.g. Nesstar); " + 
                 "this is to prevent the tasks inadvertently deleting each other's output as they drop and recreate the output directory."
             )            
@@ -195,6 +206,11 @@ public class ExecutionConfigurator {
             describe(
                 NESSTAR_CONVERT_FLAG,
                 "Triggers conversion of Nesstar export to Hippo import format."
+            ),
+            describe(
+                GENERATE_IMPORT_PACKAGE_FLAG,
+                "Triggers generation of import package - an single archive file containing all the files" +
+                    " to be imported into Hippo, with a structure expected by EXIM imported script."
             )
         );
     }

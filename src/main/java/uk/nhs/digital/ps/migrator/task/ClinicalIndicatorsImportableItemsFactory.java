@@ -295,97 +295,97 @@ public class ClinicalIndicatorsImportableItemsFactory {
 
     private String getMappedDate(String input) {
         switch (input) {
-            case "Jun-07":    return "2007-06-21T09:30:00.000Z";
+            case "Jun-07":    return "2007-06-21T00:00:00.000Z";
 
-            case "Jan-09":    return "2009-01-29T09:30:00.000Z";
-            case "Nov-09":    return "2009-11-19T09:30:00.000Z";
-            case "Dec-09":    return "2009-12-17T09:30:00.000Z";
+            case "Jan-09":    return "2009-01-29T00:00:00.000Z";
+            case "Nov-09":    return "2009-11-19T00:00:00.000Z";
+            case "Dec-09":    return "2009-12-17T00:00:00.000Z";
 
-            case "Aug-10":    return "2010-08-26T09:30:00.000Z";
+            case "Aug-10":    return "2010-08-26T00:00:00.000Z";
 
-            case "Jan-11":    return "2011-01-27T09:30:00.000Z";
-            case "Jun-11":    return "2011-06-23T09:30:00.000Z";
-            case "Oct-11":    return "2011-10-27T09:30:00.000Z";
+            case "Jan-11":    return "2011-01-27T00:00:00.000Z";
+            case "Jun-11":    return "2011-06-23T00:00:00.000Z";
+            case "Oct-11":    return "2011-10-27T00:00:00.000Z";
 
-            case "Jan-12":    return "2012-01-26T09:30:00.000Z";
-            case "Feb-12":    return "2012-02-23T09:30:00.000Z";
-            case "Mar-12":    return "2012-03-22T09:30:00.000Z";
-            case "Sep-12":    return "2012-09-27T09:30:00.000Z";
+            case "Jan-12":    return "2012-01-26T00:00:00.000Z";
+            case "Feb-12":    return "2012-02-23T00:00:00.000Z";
+            case "Mar-12":    return "2012-03-22T00:00:00.000Z";
+            case "Sep-12":    return "2012-09-27T00:00:00.000Z";
             case "Dec-12":
-            case "Dec-2012":  return "2012-12-20T09:30:00.000Z";
+            case "Dec-2012":  return "2012-12-20T00:00:00.000Z";
 
-            case "Jun-13":    return "2013-06-27T09:30:00.000Z";
-            case "Apr-13":    return "2013-04-25T09:30:00.000Z";
-            case "May-13":    return "2013-05-23T09:30:00.000Z";
-            case "Sep-13":    return "2013-09-26T09:30:00.000Z";
-            case "Dec-13":    return "2013-12-19T09:30:00.000Z";
+            case "Jun-13":    return "2013-06-27T00:00:00.000Z";
+            case "Apr-13":    return "2013-04-25T00:00:00.000Z";
+            case "May-13":    return "2013-05-23T00:00:00.000Z";
+            case "Sep-13":    return "2013-09-26T00:00:00.000Z";
+            case "Dec-13":    return "2013-12-19T00:00:00.000Z";
 
-            case "Jan-14":    return "2014-01-30T09:30:00.000Z";
-            case "Feb-14":    return "2014-02-20T09:30:00.000Z";
-            case "Mar-14":    return "2014-03-20T09:30:00.000Z";
-            case "May-14":    return "2014-05-22T09:30:00.000Z";
-            case "Jun-14":    return "2014-06-19T09:30:00.000Z";
-            case "Jul-14":    return "2014-07-30T09:30:00.000Z";
-            case "Aug-14":    return "2014-08-20T09:30:00.000Z";
-            case "Sep-14":    return "2014-09-18T09:30:00.000Z";
-            case "Oct-14":    return "2014-10-23T09:30:00.000Z";
-            case "Nov-14":    return "2014-11-20T09:30:00.000Z";
-            case "Dec-14":    return "2014-12-17T09:30:00.000Z";
+            case "Jan-14":    return "2014-01-30T00:00:00.000Z";
+            case "Feb-14":    return "2014-02-20T00:00:00.000Z";
+            case "Mar-14":    return "2014-03-20T00:00:00.000Z";
+            case "May-14":    return "2014-05-22T00:00:00.000Z";
+            case "Jun-14":    return "2014-06-19T00:00:00.000Z";
+            case "Jul-14":    return "2014-07-30T00:00:00.000Z";
+            case "Aug-14":    return "2014-08-20T00:00:00.000Z";
+            case "Sep-14":    return "2014-09-18T00:00:00.000Z";
+            case "Oct-14":    return "2014-10-23T00:00:00.000Z";
+            case "Nov-14":    return "2014-11-20T00:00:00.000Z";
+            case "Dec-14":    return "2014-12-17T00:00:00.000Z";
 
-            case "Jan-15":    return "2015-01-27T09:30:00.000Z";
+            case "Jan-15":    return "2015-01-27T00:00:00.000Z";
             case "Feb-15":
-            case "Feb-2015":  return "2015-02-19T09:30:00.000Z";
-            case "Mar-15":    return "2015-03-19T09:30:00.000Z";
-            case "Apr-15":    return "2015-04-29T09:30:00.000Z";
-            case "May-15":    return "2015-05-19T09:30:00.000Z";
-            case "Jun-15":    return "2015-06-25T09:30:00.000Z";
-            case "Jul-15":    return "2015-07-29T09:30:00.000Z";
-            case "Aug-15":    return "2015-08-19T09:30:00.000Z";
-            case "Sep-15":    return "2015-09-22T09:30:00.000Z";
-            case "Oct-15":    return "2015-10-28T09:30:00.000Z";
-            case "Nov-15":    return "2015-11-19T09:30:00.000Z";
+            case "Feb-2015":  return "2015-02-19T00:00:00.000Z";
+            case "Mar-15":    return "2015-03-19T00:00:00.000Z";
+            case "Apr-15":    return "2015-04-29T00:00:00.000Z";
+            case "May-15":    return "2015-05-19T00:00:00.000Z";
+            case "Jun-15":    return "2015-06-25T00:00:00.000Z";
+            case "Jul-15":    return "2015-07-29T00:00:00.000Z";
+            case "Aug-15":    return "2015-08-19T00:00:00.000Z";
+            case "Sep-15":    return "2015-09-22T00:00:00.000Z";
+            case "Oct-15":    return "2015-10-28T00:00:00.000Z";
+            case "Nov-15":    return "2015-11-19T00:00:00.000Z";
             case "Dec-15":
-            case "Dec-2015":  return "2015-12-17T09:30:00.000Z";
+            case "Dec-2015":  return "2015-12-17T00:00:00.000Z";
 
             case "Jan-16":
-            case "Jan-2016":  return "2016-01-27T09:30:00.000Z";
-            case "Feb-16":    return "2016-02-25T09:30:00.000Z";
-            case "Mar-16":    return "2016-03-23T09:30:00.000Z";
-            case "Apr-16":    return "2016-04-21T09:30:00.000Z";
-            case "May-16":    return "2016-05-19T09:30:00.000Z";
-            case "Jun-16":    return "2016-06-23T09:30:00.000Z";
-            case "Jul-16":    return "2016-07-20T09:30:00.000Z";
-            case "Aug-16":    return "2016-08-18T09:30:00.000Z";
-            case "Sep-16":    return "2016-09-22T09:30:00.000Z";
-            case "Oct-16":    return "2016-10-20T09:30:00.000Z";
-            case "Nov-16":    return "2016-11-17T09:30:00.000Z";
-            case "Dec-16":    return "2016-12-15T09:30:00.000Z";
+            case "Jan-2016":  return "2016-01-27T00:00:00.000Z";
+            case "Feb-16":    return "2016-02-25T00:00:00.000Z";
+            case "Mar-16":    return "2016-03-23T00:00:00.000Z";
+            case "Apr-16":    return "2016-04-21T00:00:00.000Z";
+            case "May-16":    return "2016-05-19T00:00:00.000Z";
+            case "Jun-16":    return "2016-06-23T00:00:00.000Z";
+            case "Jul-16":    return "2016-07-20T00:00:00.000Z";
+            case "Aug-16":    return "2016-08-18T00:00:00.000Z";
+            case "Sep-16":    return "2016-09-22T00:00:00.000Z";
+            case "Oct-16":    return "2016-10-20T00:00:00.000Z";
+            case "Nov-16":    return "2016-11-17T00:00:00.000Z";
+            case "Dec-16":    return "2016-12-15T00:00:00.000Z";
 
-            case "Jan-17":    return "2017-01-26T09:30:00.000Z";
-            case "Feb-17":    return "2017-02-23T09:30:00.000Z";
-            case "Mar-17":    return "2017-03-23T09:30:00.000Z";
-            case "Apr-17":    return "2017-04-20T09:30:00.000Z";
-            case "May-17":    return "2017-05-18T09:30:00.000Z";
-            case "Jun-17":    return "2017-06-22T09:30:00.000Z";
-            case "Jul-17":    return "2017-07-20T09:30:00.000Z";
-            case "Aug-17":    return "2017-08-24T09:30:00.000Z";
-            case "Sep-17":    return "2017-09-21T09:30:00.000Z";
-            case "Oct-17":    return "2017-10-19T09:30:00.000Z";
-            case "Nov-17":    return "2017-11-16T09:30:00.000Z";
-            case "Dec-17":    return "2017-12-14T09:30:00.000Z";
+            case "Jan-17":    return "2017-01-26T00:00:00.000Z";
+            case "Feb-17":    return "2017-02-23T00:00:00.000Z";
+            case "Mar-17":    return "2017-03-23T00:00:00.000Z";
+            case "Apr-17":    return "2017-04-20T00:00:00.000Z";
+            case "May-17":    return "2017-05-18T00:00:00.000Z";
+            case "Jun-17":    return "2017-06-22T00:00:00.000Z";
+            case "Jul-17":    return "2017-07-20T00:00:00.000Z";
+            case "Aug-17":    return "2017-08-24T00:00:00.000Z";
+            case "Sep-17":    return "2017-09-21T00:00:00.000Z";
+            case "Oct-17":    return "2017-10-19T00:00:00.000Z";
+            case "Nov-17":    return "2017-11-16T00:00:00.000Z";
+            case "Dec-17":    return "2017-12-14T00:00:00.000Z";
 
-            case "Jan-18":    return "2018-01-25T09:30:00.000Z";
-            case "Feb-18":    return "2018-02-22T09:30:00.000Z";
-            case "Mar-18":    return "2018-03-22T09:30:00.000Z";
-            case "Apr-18":    return "2018-04-19T09:30:00.000Z";
-            case "May-18":    return "2018-05-17T09:30:00.000Z";
-            case "Jun-18":    return "2018-06-21T09:30:00.000Z";
-            case "Jul-18":    return "2018-07-19T09:30:00.000Z";
-            case "Aug-18":    return "2018-08-23T09:30:00.000Z";
-            case "Sep-18":    return "2018-09-20T09:30:00.000Z";
-            case "Oct-18":    return "2018-10-18T09:30:00.000Z";
-            case "Nov-18":    return "2018-11-15T09:30:00.000Z";
-            case "Dec-18":    return "2018-12-13T09:30:00.000Z";
+            case "Jan-18":    return "2018-01-25T00:00:00.000Z";
+            case "Feb-18":    return "2018-02-22T00:00:00.000Z";
+            case "Mar-18":    return "2018-03-22T00:00:00.000Z";
+            case "Apr-18":    return "2018-04-19T00:00:00.000Z";
+            case "May-18":    return "2018-05-17T00:00:00.000Z";
+            case "Jun-18":    return "2018-06-21T00:00:00.000Z";
+            case "Jul-18":    return "2018-07-19T00:00:00.000Z";
+            case "Aug-18":    return "2018-08-23T00:00:00.000Z";
+            case "Sep-18":    return "2018-09-20T00:00:00.000Z";
+            case "Oct-18":    return "2018-10-18T00:00:00.000Z";
+            case "Nov-18":    return "2018-11-15T00:00:00.000Z";
+            case "Dec-18":    return "2018-12-13T00:00:00.000Z";
 
             default: return null;
         }

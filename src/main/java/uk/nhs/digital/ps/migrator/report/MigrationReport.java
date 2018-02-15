@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.nhs.digital.ps.migrator.config.ExecutionParameters;
+import uk.nhs.digital.ps.migrator.misc.MigratorExitCodeGenerator;
 import uk.nhs.digital.ps.migrator.model.nesstar.DataSetRepository;
 
 import java.io.File;
@@ -39,13 +40,17 @@ public class MigrationReport {
     private static final Logger log = LoggerFactory.getLogger(MigrationReport.class);
 
     private final ExecutionParameters executionParameters;
+    private final MigratorExitCodeGenerator migratorExitCodeGenerator;
     private final ArrayList<ErrorLogEntry> errors = new ArrayList<>();
 
     private final ArrayList<IncidentLogEntry> incidentLogEntries = new ArrayList<>();
     private DataSetRepository datasetRepository;
 
-    public MigrationReport(final ExecutionParameters executionParameters) {
+    public MigrationReport(final ExecutionParameters executionParameters,
+                           final MigratorExitCodeGenerator migratorExitCodeGenerator
+    ) {
         this.executionParameters = executionParameters;
+        this.migratorExitCodeGenerator = migratorExitCodeGenerator;
     }
 
     public void report(final String pCode, final IncidentType incidentType) {
@@ -65,8 +70,8 @@ public class MigrationReport {
     }
 
     public void logError(String error) {
-        log.error(error);
         errors.add(new ErrorLogEntry(error));
+        migratorExitCodeGenerator.markRunAsFailed();
     }
 
     public void logError(Exception e, String... output) {
@@ -80,9 +85,8 @@ public class MigrationReport {
             }
         }
 
-        log.error(error, e);
-
         errors.add(new ErrorLogEntry(e, error));
+        migratorExitCodeGenerator.markRunAsFailed();
     }
 
     public void generate() {
@@ -154,7 +158,13 @@ public class MigrationReport {
     }
 
     public void logErrors() {
-        errors.forEach(error -> log.error(error.getDescription(), error.getException()));
+        if (!errors.isEmpty()) {
+            log.error("");
+            log.error("CONVERSION HAS FAILED WITH ERRORS:");
+            log.error("");
+
+            errors.forEach(error -> log.error(error.getDescription(), error.getException()));
+        }
     }
 
     private void addReportSheet(final Workbook workbook) {

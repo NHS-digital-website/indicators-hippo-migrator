@@ -5,6 +5,7 @@ import static java.util.Arrays.asList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import uk.nhs.digital.ps.migrator.misc.MigratorExitCodeGenerator;
 import uk.nhs.digital.ps.migrator.model.hippo.MappedFieldsImporter;
 import uk.nhs.digital.ps.migrator.model.hippo.NationalIndicatorMigrator;
 import uk.nhs.digital.ps.migrator.model.hippo.TaxonomyMigrator;
@@ -34,23 +35,28 @@ public class MigratorConfiguration {
                                      final NationalIndicatorMigrator nationalIndicatorMigrator) {
 
         return asList(
-            new UnzipNesstarExportFileTask(executionParameters),
-            new GenerateNesstarImportContentTask(
-                executionParameters,
-                    clinicalIndicatorsImportableItemsFactory,
-                socialCareImportables,
-                ccgImportables,
-                nhsOutcomesFrameworkImportables,
-                compendiumImportables,
-                importableFileWriter,
-                migrationReport,
-                taxonomyMigrator),
-            new GenerateTaxonomyTask(executionParameters,
-                taxonomyMigrator),
-            new GenerateIndicatorImportContentTask(
-                executionParameters,
-                nationalIndicatorMigrator,
-                importableFileWriter)                
+                new UnzipNesstarExportFileTask(executionParameters),
+                new GenerateNesstarImportContentTask(
+                        executionParameters,
+                        clinicalIndicatorsImportableItemsFactory,
+                        socialCareImportables,
+                        ccgImportables,
+                        nhsOutcomesFrameworkImportables,
+                        compendiumImportables,
+                        importableFileWriter,
+                        migrationReport,
+                        taxonomyMigrator
+                ),
+                new GenerateTaxonomyTask(
+                        executionParameters,
+                        taxonomyMigrator
+                ),
+                new GenerateIndicatorImportContentTask(
+                        executionParameters,
+                        nationalIndicatorMigrator,
+                        importableFileWriter
+                ),
+                new GenerateImportPackageTask(executionParameters)
         );
     }
 
@@ -60,8 +66,10 @@ public class MigratorConfiguration {
     }
 
     @Bean
-    public MigrationReport migrationReport(final ExecutionParameters executionParameters) {
-        return new MigrationReport(executionParameters);
+    public MigrationReport migrationReport(final ExecutionParameters executionParameters,
+                                           final MigratorExitCodeGenerator migratorExitCodeGenerator
+    ) {
+        return new MigrationReport(executionParameters, migratorExitCodeGenerator);
     }
 
     @Bean
@@ -76,6 +84,11 @@ public class MigratorConfiguration {
                                                                            final MappedFieldsImporter mappedFieldsImporter)
     {
         return new ClinicalIndicatorsImportableItemsFactory(executionParameters, migrationReport, taxonomyMigrator, mappedFieldsImporter);
+    }
+
+    @Bean
+    public MigratorExitCodeGenerator migratorExitCodeGenerator() {
+        return new MigratorExitCodeGenerator();
     }
 
     @Bean
