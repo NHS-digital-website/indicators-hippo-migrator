@@ -23,6 +23,8 @@ public class ExecutionParameters {
     private Path taxonomyMappingImportPath;
     private Path nesstarFieldMappingImportPath;
     private Path migrationReportFilePath;
+    private boolean generateImportPackage;
+    private Path importPackageDir;
 
     private Path nationalIndicatorImportPath;   
 
@@ -130,6 +132,22 @@ public class ExecutionParameters {
         this.nationalIndicatorImportPath = nationalIndicatorImportPath;
     }
 
+    public boolean isGenerateImportPackage() {
+        return generateImportPackage;
+    }
+
+    public void setGenerateImportPackage(final boolean generateImportPackage) {
+        this.generateImportPackage = generateImportPackage;
+    }
+
+    public void setImportPackageDir(final Path importPackageDir) {
+        this.importPackageDir = importPackageDir;
+    }
+
+    public Path getImportPackageDir() {
+        return importPackageDir;
+    }
+
     public List<Descriptor> descriptions() {
         return asList(
             describe("nesstarUnzippedExportDir", nesstarUnzippedExportDir),
@@ -144,7 +162,8 @@ public class ExecutionParameters {
             describe("taxonomyMappingImportPath", taxonomyMappingImportPath),
             describe("nesstarFieldMappingImportPath", nesstarFieldMappingImportPath),
             describe("migrationReportFilePath", migrationReportFilePath),
-            describe("nationalIndicatorImportPath", nationalIndicatorImportPath)            
+            describe("nationalIndicatorImportPath", nationalIndicatorImportPath),
+            describe("importPackageDir", importPackageDir)
         );
     }
 }

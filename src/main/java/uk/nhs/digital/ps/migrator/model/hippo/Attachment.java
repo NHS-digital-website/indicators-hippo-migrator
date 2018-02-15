@@ -47,6 +47,15 @@ public class Attachment {
         return uri;
     }
 
+    public String getFilePathWithPlaceholder() {
+        // EXIM appears to require absolute paths to the attachment files but those will differ
+        // between environments.
+        // The IMPORT_PACKAGE_ATTACHMENTS_LOCATION placeholder allows
+        // to dynamically update those paths so that they are correct in the environment
+        // that the attachments are actually being imported in.
+        return "{IMPORT_PACKAGE_ATTACHMENTS_LOCATION}" + getUri();
+    }
+
     public String getFilePath() {
         return attachmentDownloadDir + getUri();
     }

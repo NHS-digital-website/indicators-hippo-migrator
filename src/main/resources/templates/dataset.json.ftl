@@ -89,7 +89,7 @@
           "name":"jcr:data",
           "type":"BINARY",
           "multiple":false,
-          "values":[ "file://${attachment.filePath}" ]
+          "values":[ "file://${attachment.filePathWithPlaceholder}" ]
         }, {
           "name":"jcr:mimeType",
           "type":"STRING",

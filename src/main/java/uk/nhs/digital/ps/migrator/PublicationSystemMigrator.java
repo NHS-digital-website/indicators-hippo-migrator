@@ -2,13 +2,17 @@ package uk.nhs.digital.ps.migrator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import uk.nhs.digital.ps.migrator.config.ExecutionConfigurator;
 import uk.nhs.digital.ps.migrator.config.ExecutionParameters;
 import uk.nhs.digital.ps.migrator.misc.Descriptor;
+import uk.nhs.digital.ps.migrator.misc.MigratorExitCodeGenerator;
 import uk.nhs.digital.ps.migrator.report.MigrationReport;
 import uk.nhs.digital.ps.migrator.task.MigrationTask;
 
@@ -18,7 +22,7 @@ import static java.lang.String.format;
 import static uk.nhs.digital.ps.migrator.config.ExecutionConfigurator.HELP_FLAG;
 
 @SpringBootApplication
-public class PublicationSystemMigrator implements ApplicationRunner {
+public class PublicationSystemMigrator implements ApplicationRunner, ApplicationContextAware {
 
     private final Logger log = LoggerFactory.getLogger(PublicationSystemMigrator.class);
 
@@ -30,6 +34,10 @@ public class PublicationSystemMigrator implements ApplicationRunner {
 
     private final ExecutionParameters executionParameters;
 
+    private MigratorExitCodeGenerator migratorExitCodeGenerator;
+
+    private ApplicationContext applicationContext;
+
 
     public static void main(final String... args) {
         SpringApplication.run(PublicationSystemMigrator.class, args);
@@ -38,11 +46,13 @@ public class PublicationSystemMigrator implements ApplicationRunner {
     public PublicationSystemMigrator(final List<MigrationTask> migrationTasks,
                                      final ExecutionConfigurator executionConfigurator,
                                      final MigrationReport migrationReport,
-                                     final ExecutionParameters executionParameters) {
+                                     final ExecutionParameters executionParameters, final MigratorExitCodeGenerator
+                                             migratorExitCodeGenerator) {
         this.migrationTasks = migrationTasks;
         this.executionConfigurator = executionConfigurator;
         this.migrationReport = migrationReport;
         this.executionParameters = executionParameters;
+        this.migratorExitCodeGenerator = migratorExitCodeGenerator;
     }
 
     @Override
@@ -67,14 +77,21 @@ public class PublicationSystemMigrator implements ApplicationRunner {
                 .filter(MigrationTask::isRequested).forEach(MigrationTask::execute);
 
         } catch (final Exception e) {
-            log.error("Migration has failed.", e);
+            migrationReport.logError(e, "Unexpected error occurred, conversion has failed.");
         } finally {
+
             migrationReport.generate();
             migrationReport.logErrors();
 
             logExecutionParameters();
-        }
 
+            if (migratorExitCodeGenerator.isRunFailed()) {
+                log.error("");
+                log.error("CONVERSION  HAS FAILED; SEE THE LOG FOR ERRORS.");
+                log.error("");
+                System.exit(SpringApplication.exit(applicationContext));
+            }
+        }
     }
 
     private void logExecutionParameters() {
@@ -115,5 +132,10 @@ public class PublicationSystemMigrator implements ApplicationRunner {
                 optionDescriptor.getDescription()
             );
         });
+    }
+
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

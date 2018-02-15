@@ -23,13 +23,14 @@ public abstract class HippoImportableItem {
 
     protected static String ROOT_PATH_PREFIX = "/content/documents/corporate-website/";
 
-    protected abstract String getRootPathPrefix();
-
     protected final HippoImportableItem parentFolder;
 
     private String localizedName;
+
     private String jcrNodeName;
     private String jcrPath;
+
+    protected abstract String getRootPathPrefix();
 
     protected HippoImportableItem(final HippoImportableItem parentFolder,
                                   final String localizedName

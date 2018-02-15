@@ -22,7 +22,7 @@ public enum IncidentType {
             + "\nare needed."
     ),
     DATE_WITH_EXTRA_TEXT(
-            VALUE_MIGRATED_MODIFIED,
+        VALUE_MIGRATED_MODIFIED,
         "Date found with additional text",
         "Date field | Value found | Interpreted as",
         "Date in the exported data contained some extra text. The imported Dataset"
