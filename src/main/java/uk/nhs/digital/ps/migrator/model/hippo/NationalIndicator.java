@@ -5,7 +5,6 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
     private final String iapCode;
     private final String title;
     private final String publishedBy;
-    private final String publishedDate;
     private final String reportingPeriod;
     private final String reportingLevel;
     private final String basedOn;
@@ -16,7 +15,10 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
     private final String indicatorSet;
     private final String purpose;
     private final String definition;
-    private final String descriptor;
+    private final String dataSource;
+    private final String numerator;
+    private final String denominator;
+    private final String calculation;            
     private final String interpretationGuidelines;
     private final String caveats;
 
@@ -25,7 +27,6 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
                        final String iapCode,
                        final String title,
                        final String publishedBy,
-                       final String publishedDate,
                        final String reportingPeriod,
                        final String reportingLevel,
                        final String basedOn,
@@ -36,7 +37,10 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
                        final String indicatorSet,
                        final String purpose,
                        final String definition,
-                       final String descriptor,
+                       final String dataSource,
+                       final String numerator,
+                       final String denominator,
+                       final String calculation,
                        final String interpretationGuidelines,
                        final String caveats
                        ) {
@@ -44,7 +48,6 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
         this.iapCode = iapCode;
         this.title = title;
         this.publishedBy = publishedBy;
-        this.publishedDate = publishedDate;
         this.reportingPeriod = reportingPeriod;
         this.reportingLevel = reportingLevel;
         this.basedOn = basedOn;
@@ -55,7 +58,10 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
         this.indicatorSet = indicatorSet;
         this.purpose = purpose;
         this.definition = definition;
-        this.descriptor = descriptor;
+        this.dataSource = dataSource;
+        this.numerator = numerator;
+        this.denominator = denominator;
+        this.calculation = calculation;
         this.interpretationGuidelines = interpretationGuidelines;
         this.caveats = caveats;
     }
@@ -70,10 +76,6 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
 
 	public String getPublishedBy() {
 		return publishedBy;
-	}
-
-	public String getPublishedDate() {
-		return publishedDate;
 	}
 
 	public String getReportingPeriod() {
@@ -116,9 +118,21 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
 		return definition;
 	}
 
-	public String getDescriptor() {
-		return descriptor;
+	public String getDataSource() {
+		return dataSource;
 	}
+
+	public String getNumerator() {
+		return numerator;
+    }
+    
+	public String getDenominator() {
+		return denominator;
+    }
+    
+	public String getCalculation() {
+		return calculation;
+	}    
 
 	public String getInterpretationGuidelines() {
 		return interpretationGuidelines;
