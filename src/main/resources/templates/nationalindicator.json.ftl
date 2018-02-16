@@ -22,77 +22,87 @@
     "name" : "nationalindicatorlibrary:publishedBy",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.publishedBy}" ]
-  }, {
-    "name" : "nationalindicatorlibrary:publishedDate",
-    "type" : "STRING",
-    "multiple" : false,
-    "values" : [ "${nationalindicator.publishedDate}" ]
+    "values" : [ "${(nationalindicator.publishedBy)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:reportingPeriod",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.reportingPeriod}" ]
+    "values" : [ "${(nationalindicator.reportingPeriod)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:reportingLevel",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.reportingLevel}" ]
+    "values" : [ "${(nationalindicator.reportingLevel)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:basedOn",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.basedOn}" ]
+    "values" : [ "${(nationalindicator.basedOn)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:contactAuthor",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.contactAuthor}" ]
+    "values" : [ "${(nationalindicator.contactAuthor)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:rating",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.rating}" ]
+    "values" : [ "${(nationalindicator.rating)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:assuranceDate",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.assuranceDate}" ]    
+    "values" : [ "${(nationalindicator.assuranceDate)!}" ]    
   }, {
     "name" : "nationalindicatorlibrary:reviewDate",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.reviewDate}" ]
+    "values" : [ "${(nationalindicator.reviewDate)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:indicatorSet",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.indicatorSet}" ]
+    "values" : [ "${(nationalindicator.indicatorSet)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:purpose",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.purpose}" ]
+    "values" : [ "${(nationalindicator.purpose)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:definition",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.definition}" ]
+    "values" : [ "${(nationalindicator.definition)!}" ]
   }, {
-    "name" : "nationalindicatorlibrary:descriptor",
+    "name" : "nationalindicatorlibrary:dataSource",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.descriptor}" ]
+    "values" : [ "${(nationalindicator.dataSource)!}" ]
+  }, {
+    "name" : "nationalindicatorlibrary:numerator",
+    "type" : "STRING",
+    "multiple" : false,
+    "values" : [ "${(nationalindicator.numerator)!}" ]
+  }, {
+    "name" : "nationalindicatorlibrary:denominator",
+    "type" : "STRING",
+    "multiple" : false,
+    "values" : [ "${(nationalindicator.denominator)!}" ]
+  }, {
+    "name" : "nationalindicatorlibrary:calculation",
+    "type" : "STRING",
+    "multiple" : false,
+    "values" : [ "${(nationalindicator.calculation)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:interpretationGuidelines",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.interpretationGuidelines}" ]
+    "values" : [ "${(nationalindicator.interpretationGuidelines)!}" ]
   }, {
     "name" : "nationalindicatorlibrary:caveats",
     "type" : "STRING",
     "multiple" : false,
-    "values" : [ "${nationalindicator.caveats}" ]
+    "values" : [ "${(nationalindicator.caveats)!}" ]
   }, {
     "name" : "jcr:path",
     "type" : "STRING",

@@ -3,6 +3,7 @@ package uk.nhs.digital.ps.migrator.model.hippo;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.AbstractMap;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +15,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import uk.nhs.digital.ps.migrator.misc.TextHelper;
 
 /**
  * Shared functions for streaming and reading Excel sheets/rows.
@@ -72,7 +75,7 @@ public class XlsxReader {
 
     /**
      * Clean the header name into a desanitised lower case value. This makes it more robust (no spaces etc.).
-     */      
+     */
     public static String cleanHeader(String val) {
         String cleanedColName = val.trim()
             .replaceAll("[^A-z]", "-")
@@ -91,18 +94,35 @@ public class XlsxReader {
 
         return this.headerNameIndexPairs.get(cleanHeader(columnName));    
     }
-
+  
     /**
      * Returns string cell value. Apache code will throw exception if the cell is not of type string.
      */        
     public String getCellValue(String columnName, Row row){
-        return row.getCell(getColumnIndex(columnName)).getStringCellValue().trim().replace("\n", "\\n").replace("\r", "\\r");
+        Cell cell = row.getCell(getColumnIndex(columnName));
+        if (cell == null)
+            return null;
+
+        String rawValue = cell.getStringCellValue();
+        if (rawValue == null)
+            return null;
+
+
+        return TextHelper.escapeSpecialCharsForJson(rawValue);
     }
 
-    /**l
+    /**
      * Returns date cell value. Apache code will throw exception if the cell is not of type date. We generally import into Hippo using strings so this formats using the standard date format.
      */       
     public String getDateValue(String columnName, Row row){
-        return HippoImportableItem.DATE_FORMAT.format(row.getCell(getColumnIndex(columnName)).getDateCellValue());
+        Cell cell = row.getCell(getColumnIndex(columnName));
+        if (cell == null)
+            return null;
+
+        Date rawValue = cell.getDateCellValue();
+        if (rawValue == null)
+            return null;
+
+        return HippoImportableItem.DATE_FORMAT.format(rawValue);
     }        
 }

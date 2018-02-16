@@ -67,4 +67,9 @@ public class TextHelper {
             .map(word -> StringUtils.truncate(word, 3))
             .collect(Collectors.joining("-"));
     }
+
+    //handle newline and inline quotes
+    public static String escapeSpecialCharsForJson(final String input){
+        return input.trim().replace("\n", "\\n").replace("\r", "\\r").replace("\"", "\\\"");
+    }
 }
