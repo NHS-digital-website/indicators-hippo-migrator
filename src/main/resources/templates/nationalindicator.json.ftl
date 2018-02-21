@@ -2,7 +2,7 @@
 {
   "name" : "${nationalindicator.jcrNodeName}",
   "primaryType" : "nationalindicatorlibrary:indicator",
-  "mixinTypes" : [ "mix:referenceable" ],
+  "mixinTypes" : [ "mix:referenceable", "hippotaxonomy:classifiable" ],
   "properties" : [ {
     "name" : "hippotranslation:locale",
     "type" : "STRING",
@@ -94,6 +94,11 @@
     "multiple" : false,
     "values" : [ "${(nationalindicator.calculation)!}" ]
   }, {
+    "name" : "nationalindicatorlibrary:methodology",
+    "type" : "STRING",
+    "multiple" : false,
+    "values" : [ "${(nationalindicator.methodology)!}" ]
+  }, {
     "name" : "nationalindicatorlibrary:interpretationGuidelines",
     "type" : "STRING",
     "multiple" : false,
@@ -113,6 +118,11 @@
     "type" : "STRING",
     "multiple" : false,
     "values" : [ "${nationalindicator.localizedName}" ]
-  } ],
+  },<#if nationalindicator.taxonomyKeys?has_content> {
+       "name" : "hippotaxonomy:keys",
+       "type" : "STRING",
+       "multiple" : true,
+       "values" : [ "${nationalindicator.taxonomyKeys}" ]
+  }</#if> ],
   "nodes" : [ ]
 }

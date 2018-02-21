@@ -34,9 +34,11 @@ public class NationalIndicatorMigrator {
     private static final String DATASOURCE_COLUMN = "Data Source";  
     private static final String NUMERATOR_COLUMN = "Numerator";  
     private static final String DENOMINATOR_COLUMN = "Denominator";  
-    private static final String CALCULATION_COLUMN = "Calculation";                
+    private static final String CALCULATION_COLUMN = "Calculation";   
+    private static final String METHODOLOGY_COLUMN = "Methodology";                  
     private static final String INTERPRETATIONGUIDELINES_COLUMN = "Interpretation Guidelines";  
     private static final String CAVEATS_COLUMN = "Caveats";  
+    private static final String TAXONOMY_COLUMN = "Taxonomy";  
 
  
 
@@ -83,9 +85,11 @@ public class NationalIndicatorMigrator {
                 this.xlsxReader.getCellValue(DATASOURCE_COLUMN,row),
                 this.xlsxReader.getCellValue(NUMERATOR_COLUMN,row),
                 this.xlsxReader.getCellValue(DENOMINATOR_COLUMN,row),
-                this.xlsxReader.getCellValue(CALCULATION_COLUMN,row),                                                
+                this.xlsxReader.getCellValue(CALCULATION_COLUMN,row),   
+                this.xlsxReader.getCellValue(METHODOLOGY_COLUMN,row),                                                    
                 this.xlsxReader.getCellValue(INTERPRETATIONGUIDELINES_COLUMN,row),
-                this.xlsxReader.getCellValue(CAVEATS_COLUMN,row)
+                this.xlsxReader.getCellValue(CAVEATS_COLUMN,row),
+                this.xlsxReader.getCellValue(TAXONOMY_COLUMN,row)
                 ));
         }
 
