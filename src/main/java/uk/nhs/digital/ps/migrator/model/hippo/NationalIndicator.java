@@ -18,9 +18,11 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
     private final String dataSource;
     private final String numerator;
     private final String denominator;
-    private final String calculation;            
+    private final String calculation;  
+    private final String methodology;               
     private final String interpretationGuidelines;
     private final String caveats;
+    private final String taxonomyKeys;
 
     public NationalIndicator(final NilFolder parent,
                        final String displayName,
@@ -41,8 +43,10 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
                        final String numerator,
                        final String denominator,
                        final String calculation,
+                       final String methodology,
                        final String interpretationGuidelines,
-                       final String caveats
+                       final String caveats,
+                       final String taxonomyKeys
                        ) {
         super(parent, displayName);
         this.iapCode = iapCode;
@@ -62,8 +66,10 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
         this.numerator = numerator;
         this.denominator = denominator;
         this.calculation = calculation;
+        this.methodology = methodology;
         this.interpretationGuidelines = interpretationGuidelines;
         this.caveats = caveats;
+        this.taxonomyKeys = taxonomyKeys;
     }
 
     public String getIapCode() {
@@ -134,11 +140,19 @@ public class NationalIndicator extends NationalIndicatorHippoImportableItem {
 		return calculation;
 	}    
 
+	public String getMethodology() {
+		return methodology;
+	}    
+
 	public String getInterpretationGuidelines() {
 		return interpretationGuidelines;
 	}
 
 	public String getCaveats() {
 		return caveats;
-	}
+    }
+    
+	public String getTaxonomyKeys() {
+		return taxonomyKeys;
+	}    
 }
