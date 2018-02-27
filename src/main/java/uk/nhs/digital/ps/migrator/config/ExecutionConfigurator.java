@@ -43,6 +43,7 @@ public class ExecutionConfigurator {
     private static final String MIGRATION_REPORT_FILENAME_DEFAULT = "Clinical Indicators Migration Report {TIMESTAMP}.xlsx";
 
     private static final String NATIONAL_INDICATORS_IMPORT_PATH = "nationalIndicatorImportPath";
+    private static final String NATIONAL_INDICATORS_ATTACHMENT_PATH = "nationalIndicatorAttachmentPath";
 
     private final ExecutionParameters executionParameters;
 
@@ -70,6 +71,8 @@ public class ExecutionConfigurator {
         executionParameters.setGenerateImportPackage(args.containsOption(GENERATE_IMPORT_PACKAGE_FLAG));
 
         executionParameters.setNationalIndicatorImportPath(getPathArg(args, NATIONAL_INDICATORS_IMPORT_PATH));
+
+        executionParameters.setNationalIndicatorAttachmentPath(getPathArg(args, NATIONAL_INDICATORS_ATTACHMENT_PATH));
 
         initNesstarUnzippedArchiveDir();
         initMigrationReportOutputPath(args);
@@ -100,6 +103,13 @@ public class ExecutionConfigurator {
         }
 
         executionParameters.setNesstarAttachmentDownloadDir(pathArg);
+
+        pathArg = getPathArg(args, NATIONAL_INDICATORS_ATTACHMENT_PATH);
+        if (pathArg == null) {
+            pathArg = Paths.get(MIGRATOR_TEMP_DIR_PATH.toString(), ATTACHMENT_DOWNLOAD_DIR_NAME_DEFAULT);
+        }
+        
+        executionParameters.setNationalIndicatorAttachmentPath(pathArg);
     }
 
     private void initTaxonomyDefinitionOutputPath(final ApplicationArguments args) {
