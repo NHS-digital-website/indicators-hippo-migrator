@@ -41,6 +41,7 @@ public class TaxonomyTerm extends HippoNode {
         // Need unique names for the nodes and the taxonomy keys so we just use the
         // term after formatting into a valid path name.
         String key = term.trim()
+            .replace("\\\"", "")
             .replaceAll("[^A-z]", "-")
             .toLowerCase();
 

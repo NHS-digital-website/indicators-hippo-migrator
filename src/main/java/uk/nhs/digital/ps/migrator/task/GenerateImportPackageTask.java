@@ -40,8 +40,7 @@ public class GenerateImportPackageTask implements MigrationTask {
         // - exim/          - EXIM JSON import files
         // - attachments/   - attachment files
 
-        final Path importPackageDir = executionParameters.getImportPackageDir();
-        recreate(importPackageDir);
+        final Path importPackageDir = executionParameters.getImportPackageDir();     
 
         final Path importPackageSrcDir = Paths.get(importPackageDir.toString(), "src");
         final Path eximDir = Paths.get(importPackageSrcDir.toString(), "exim");
@@ -56,6 +55,7 @@ public class GenerateImportPackageTask implements MigrationTask {
         log.info("Copying content into the archive source dir {}", importPackageSrcDir);
         copyContent(executionParameters.getHippoImportDir(), eximDir);
         copyContent(executionParameters.getNesstarAttachmentDownloadDir(), attachmentsDir);
+        copyContent(executionParameters.getNationalIndicatorAttachmentPath(), attachmentsDir);
         log.info("Done.");
 
         generateImportPackageZipFile("import-package.zip", importPackageDir, importPackageSrcDir);

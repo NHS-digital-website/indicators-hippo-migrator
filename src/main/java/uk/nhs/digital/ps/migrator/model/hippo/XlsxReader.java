@@ -15,7 +15,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import uk.nhs.digital.ps.migrator.misc.TextHelper;
 
 /**
@@ -94,7 +93,7 @@ public class XlsxReader {
 
         return this.headerNameIndexPairs.get(cleanHeader(columnName));    
     }
-  
+    
     /**
      * Returns string cell value. Apache code will throw exception if the cell is not of type string.
      */        
@@ -109,6 +108,18 @@ public class XlsxReader {
 
 
         return TextHelper.escapeSpecialCharsForJson(rawValue);
+    }
+
+    /**
+     * Returns the cell value is a HTML-handled paragraph. This is for the scenario where Hippo is expecting 'rich text',
+     * and without doing this, will automatically apply additional HTML when editing.
+     */
+    public String getCellValueAsHtmlParagraph(String columnName, Row row){
+        String cellValue = getCellValue(columnName, row);
+        if (cellValue == null || cellValue.length() == 0)
+            return null;
+
+        return TextHelper.convertToHtmlParagraph(cellValue);
     }
 
     /**

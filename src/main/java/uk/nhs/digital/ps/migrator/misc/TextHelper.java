@@ -68,8 +68,15 @@ public class TextHelper {
             .collect(Collectors.joining("-"));
     }
 
-    //handle newline and inline quotes
+    //handle special characters in Json (e.g. escape slashes)
     public static String escapeSpecialCharsForJson(final String input){
-        return input.trim().replace("\n", "\\n").replace("\r", "\\r").replace("\"", "\\\"");
+        return input.trim().replace("\"", "\\\"");
     }
+
+    /**
+     * Wrap in paragraph tags and replace system new lines with breaks.
+     */
+    public static String convertToHtmlParagraph(final String input){
+        return "<p>" + input.trim().replace(System.getProperty("line.separator"),"<br>") + "</p>";
+    }    
 }

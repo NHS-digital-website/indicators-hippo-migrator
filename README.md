@@ -106,6 +106,15 @@ Note that, while `nesstarAttachmentDownloadFolder` is optional, it's useful to p
 default one under `/tmp`, so that the downloaded files would be preserved between OS sessions, thus avoiding having to
 spend time re-downloading them repeatedly.
 
+In the case of National Indicator Library content:
+```bash
+java -jar publication-system-migrator.jar \
+--nationalIndicatorImportPath=/home/dev/migration/Indicators.xlsx,\
+--nationalIndicatorAttachmentPath=/home/dev/migration/PDFpacks,\
+--taxonomyDefinitionImportPath=/home/dev/migration/Taxonomy.xlsx,\
+--generateImportPackage"
+```
+
 Files included in the command line above are latest at the moment of writing; for their latest versions go to Confluence
 page titled [Structure Mapping].
 
