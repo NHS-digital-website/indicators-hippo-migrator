@@ -27,7 +27,9 @@ public class ExecutionParameters {
     private Path importPackageDir;
 
     private Path nationalIndicatorImportPath;  
-    private Path nationalIndicatorAttachmentPath;  
+    private Path nationalIndicatorAttachmentPath;
+    private Path gdprSrcSpreadsheetPath;
+    private String gdprSrcSpreadsheetName;
 
     public Path getNesstarUnzippedExportDir() {
         return nesstarUnzippedExportDir;
@@ -157,6 +159,22 @@ public class ExecutionParameters {
         return importPackageDir;
     }
 
+    public void setGdprSrcWorkbookPath(final Path gdprSrcSpreadsheetPath) {
+        this.gdprSrcSpreadsheetPath = gdprSrcSpreadsheetPath;
+    }
+
+    public Path getGdprSrcSpreadsheetPath() {
+        return gdprSrcSpreadsheetPath;
+    }
+
+    public void setGdprSrcSpreadsheetName(final String gdprSrcSpreadsheetName) {
+        this.gdprSrcSpreadsheetName = gdprSrcSpreadsheetName;
+    }
+
+    public String getGdprSrcSpreadsheetName() {
+        return gdprSrcSpreadsheetName;
+    }
+
     public List<Descriptor> descriptions() {
         return asList(
             describe("nesstarUnzippedExportDir", nesstarUnzippedExportDir),
@@ -173,7 +191,9 @@ public class ExecutionParameters {
             describe("migrationReportFilePath", migrationReportFilePath),
             describe("nationalIndicatorImportPath", nationalIndicatorImportPath),
             describe("nationalIndicatorAttachmentPath", nationalIndicatorAttachmentPath),
-            describe("importPackageDir", importPackageDir)
+            describe("importPackageDir", importPackageDir),
+            describe("gdprSrcSpreadsheetPath", gdprSrcSpreadsheetPath),
+            describe("gdprSrcSpreadsheetName", gdprSrcSpreadsheetName)
         );
     }
 }

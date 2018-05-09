@@ -56,7 +56,10 @@ public class MigratorConfiguration {
                         nationalIndicatorMigrator,
                         importableFileWriter
                 ),
-                new GenerateImportPackageTask(executionParameters)
+                new GenerateImportPackageTask(executionParameters),
+                new GdprTransparencyConversionTask(executionParameters,
+                    importableFileWriter
+                )
         );
     }
 
