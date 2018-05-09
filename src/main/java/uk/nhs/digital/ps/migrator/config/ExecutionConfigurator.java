@@ -45,6 +45,10 @@ public class ExecutionConfigurator {
     private static final String NATIONAL_INDICATORS_IMPORT_PATH = "nationalIndicatorImportPath";
     private static final String NATIONAL_INDICATORS_ATTACHMENT_PATH = "nationalIndicatorAttachmentPath";
 
+    private static final String GDPR_SOURCE_WORKBOOK_PATH = "gdprSrcWorkbookPath";
+    private static final String GDPR_SOURCE_SPREADSHEET_NAME = "gdprSrcSpreadsheetName";
+
+
     private final ExecutionParameters executionParameters;
 
     public ExecutionConfigurator(final ExecutionParameters executionParameters) {
@@ -80,6 +84,22 @@ public class ExecutionConfigurator {
         initDownloadDir(args);
         initTaxonomyDefinitionOutputPath(args);
         initImportPackageDir();
+        initGdprSettings(args);
+    }
+
+    private void initGdprSettings(final ApplicationArguments args) {
+        if (args.containsOption(GDPR_SOURCE_WORKBOOK_PATH)) {
+            executionParameters.setGdprSrcWorkbookPath(getPathArg(args,
+                GDPR_SOURCE_WORKBOOK_PATH));
+        }
+
+        executionParameters.setGdprSrcSpreadsheetName(
+            getSingleStringValue(args, GDPR_SOURCE_SPREADSHEET_NAME)
+        );
+    }
+
+    private String getSingleStringValue(final ApplicationArguments args, final String key) {
+        return args.containsOption(key) ? args.getOptionValues(key).get(0) : null;
     }
 
     private void initImportPackageDir() {
@@ -197,7 +217,16 @@ public class ExecutionConfigurator {
                 "Path to the spreadsheet that contains the national indicators we want to import into hippo. Required for national indicator imports. " +
                 "NOT to be used together with arguments that trigger other conversions (e.g. Nesstar); " + 
                 "this is to prevent the tasks inadvertently deleting each other's output as they drop and recreate the output directory."
-            )            
+            ),
+            describe(
+                GDPR_SOURCE_WORKBOOK_PATH,
+                "Path to the workbook with content of GDPR documents to convert to EXIM compatible files."
+            ),
+            describe(
+                GDPR_SOURCE_SPREADSHEET_NAME,
+                "Name of the spreadsheed defining GDPR document to import from workbook given by --" +
+                    GDPR_SOURCE_WORKBOOK_PATH
+            )
         );
     }
 
