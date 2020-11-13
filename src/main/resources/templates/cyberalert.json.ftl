@@ -98,18 +98,35 @@
        "multiple" : false,
        "values" : [ "${cyberalert.linkToNcsc}" ]
      } ],
-  "nodes" : [{
-      "name" : "website:indicatorscompromise",
-      "primaryType" : "hippostd:html",
+    "nodes" : [
+<#if cyberalert.indicatorsOfCompromise?has_content>{
+      "name" : "website:indicatorscompromisenew",
+      "primaryType" : "website:expander",
       "mixinTypes" : [ ],
       "properties" : [ {
+        "name" : "website:heading",
+        "type" : "STRING",
+        "multiple" : false,
+        "values" : [ "Main indicators" ]
+      }, {
+        "name" : "website:audience",
+        "type" : "STRING",
+        "multiple" : false,
+        "values" : [ "Most people" ]
+      } ],
+      "nodes" : [ {
+        "name" : "website:content",
+        "primaryType" : "hippostd:html",
+        "mixinTypes" : [ ],
+        "properties" : [ {
         "name" : "hippostd:content",
         "type" : "STRING",
         "multiple" : false,
         "values" : [ "${cyberalert.indicatorsOfCompromise}" ]
       } ],
       "nodes" : [ ]
-    }, {
+      }]
+    },</#if><#if cyberalert.remediationIntroduction?has_content> {
       "name" : "website:remediationintro",
       "primaryType" : "hippostd:html",
       "mixinTypes" : [ ],
@@ -120,7 +137,7 @@
         "values" : [ "${cyberalert.remediationIntroduction}" ]
       } ],
       "nodes" : [ ]
-    },{
+    },</#if>{
       "name" : "website:summary",
       "primaryType" : "hippostd:html",
       "mixinTypes" : [ ],
@@ -172,7 +189,7 @@
       } ]
     } <#sep>,</#sep>
     </#list>
-    , {
+    <#if cyberalert.threatDetail?has_content>, {
       "name" : "website:section",
       "primaryType" : "website:section",
       "mixinTypes" : [ ],
@@ -192,7 +209,7 @@
         "multiple" : false,
         "values" : [ "" ]
       } ],
-      "nodes" : [ {
+      "nodes" : [{
         "name" : "website:html",
         "primaryType" : "hippostd:html",
         "mixinTypes" : [ ],
@@ -204,7 +221,7 @@
         } ],
         "nodes" : [ ]
       } ]
-    }
+    }</#if>
     <#if cyberalert.updateDetail1?has_content || cyberalert.updateHeader1?has_content>
     ,{
       "name" : "website:threatupdates",

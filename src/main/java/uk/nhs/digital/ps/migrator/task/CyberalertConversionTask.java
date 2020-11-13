@@ -67,7 +67,7 @@ public class CyberalertConversionTask implements MigrationTask {
         final Path hippoImportDir = executionParameters.getHippoImportDir();
         final Path cyberalertSpreadsheetPath = executionParameters.getCyberSrcSpreadsheetPath();
         final String cyberalertSpreadsheetName = executionParameters.getCyberalertSrcSpreadsheetName();
-        final int year = 2015;
+        final int year = 2020;
 
         assertRequiredArgs(hippoImportDir, cyberalertSpreadsheetPath, cyberalertSpreadsheetName);
 

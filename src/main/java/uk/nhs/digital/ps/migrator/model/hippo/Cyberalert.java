@@ -212,8 +212,9 @@ public class Cyberalert extends CyberalertImportableItem {
 
     public List<PlatformLink> getPlatforms() {
 
-        if (platformAffected.isEmpty())
+        if (platformAffected.isEmpty()) {
             return Collections.emptyList();
+        }
 
         return Arrays.stream(platformAffected.split(";"))
                 .map(this::createPlatform)
