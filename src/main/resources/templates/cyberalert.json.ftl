@@ -150,45 +150,72 @@
       "nodes" : [ ]
     }
     <#if cyberalert.platforms?size != 0>,</#if>
-    <#list cyberalert.platforms as platform>
-    {
-      "name" : "website:threataffects",
-      "primaryType" : "website:threataffect",
-      "mixinTypes" : [ ],
-      "properties" : [ {
-        "name" : "website:versionsaffetcted",
-        "type" : "STRING",
-        "multiple" : true,
-        "values" : [ "<#if platform?index == 0>${cyberalert.versionsAffected}</#if>" ]
-      } ],
-      "nodes" : [
-      {
-        "name" : "website:platformaffected",
-        "primaryType" : "hippo:mirror",
-        "mixinTypes" : [ ],
-        "properties" : [ {
-          "name" : "hippo:docbase",
-          "type" : "STRING",
-          "multiple" : false,
-          "values" : [ "${platform.id}" ]
+    <#if cyberalert.platforms?has_content>
+        <#list cyberalert.platforms as platform>
+        {
+          "name" : "website:threataffects",
+          "primaryType" : "website:threataffect",
+          "mixinTypes" : [ ],
+          "properties" : [ {
+            "name" : "website:versionsaffetcted",
+            "type" : "STRING",
+            "multiple" : true,
+            "values" : [ "<#if platform?index == 0>${cyberalert.versionsAffected}</#if>" ]
           } ],
-        "nodes" : [ ]
-      }
-      ,
-      {
-        "name" : "website:platformtext",
-        "primaryType" : "hippostd:html",
-        "mixinTypes" : [ ],
-        "properties" : [ {
-          "name" : "hippostd:content",
-          "type" : "STRING",
-          "multiple" : false,
-          "values" : [ "<#if platform?index == 0>${cyberalert.platformText}</#if>" ]
-        } ],
-        "nodes" : [ ]
-      } ]
-    } <#sep>,</#sep>
-    </#list>
+          "nodes" : [
+          {
+            "name" : "website:platformaffected",
+            "primaryType" : "hippo:mirror",
+            "mixinTypes" : [ ],
+            "properties" : [ {
+              "name" : "hippo:docbase",
+              "type" : "STRING",
+              "multiple" : false,
+              "values" : [ "${platform.id}" ]
+              } ],
+            "nodes" : [ ]
+          }
+          ,
+          {
+            "name" : "website:platformtext",
+            "primaryType" : "hippostd:html",
+            "mixinTypes" : [ ],
+            "properties" : [ {
+              "name" : "hippostd:content",
+              "type" : "STRING",
+              "multiple" : false,
+              "values" : [ "<#if platform?index == 0>${cyberalert.platformText}</#if>" ]
+            } ],
+            "nodes" : [ ]
+          } ]
+        } <#sep>,</#sep>
+        </#list>
+    <#elseif cyberalert.platformText?has_content>
+        ,{
+          "name" : "website:threataffects",
+          "primaryType" : "website:threataffect",
+          "mixinTypes" : [ ],
+          "properties" : [ {
+            "name" : "website:versionsaffetcted",
+            "type" : "STRING",
+            "multiple" : true,
+            "values" : [ "${cyberalert.versionsAffected}" ]
+          } ],
+          "nodes" : [
+          {
+            "name" : "website:platformtext",
+            "primaryType" : "hippostd:html",
+            "mixinTypes" : [ ],
+            "properties" : [ {
+              "name" : "hippostd:content",
+              "type" : "STRING",
+              "multiple" : false,
+              "values" : [ "${cyberalert.platformText}" ]
+            } ],
+            "nodes" : [ ]
+          } ]
+        }
+    </#if>
     <#if cyberalert.threatDetail?has_content>, {
       "name" : "website:section",
       "primaryType" : "website:section",
