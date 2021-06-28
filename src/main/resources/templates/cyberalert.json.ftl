@@ -63,11 +63,6 @@
        "multiple" : false,
        "values" : [ "${cyberalert.threatType}" ]
      }, {
-       "name" : "website:seosummary",
-       "type" : "STRING",
-       "multiple" : false,
-       "values" : [ "${cyberalert.seoSummary}" ]
-     }, {
        "name" : "hippotranslation:locale",
        "type" : "STRING",
        "multiple" : false,
@@ -135,6 +130,17 @@
         "type" : "STRING",
         "multiple" : false,
         "values" : [ "${cyberalert.remediationIntroduction}" ]
+      } ],
+      "nodes" : [ ]
+    },</#if><#if cyberalert.seoSummary?has_content> {
+      "name" : "website:seosummary",
+      "primaryType" : "hippostd:html",
+      "mixinTypes" : [ ],
+      "properties" : [ {
+        "name" : "hippostd:content",
+        "type" : "STRING",
+        "multiple" : false,
+        "values" : [ "${cyberalert.seoSummary}" ]
       } ],
       "nodes" : [ ]
     },</#if>{
