@@ -59,6 +59,15 @@ public class MigratorConfiguration {
                 new GenerateImportPackageTask(executionParameters),
                 new GdprTransparencyConversionTask(executionParameters,
                     importableFileWriter
+                ),
+                new OrganisationConversionTask(executionParameters,
+                        importableFileWriter
+                ),
+                new PlatformConversionTask(executionParameters,
+                        importableFileWriter
+                ),
+                new CyberalertConversionTask(executionParameters,
+                        importableFileWriter
                 )
         );
     }

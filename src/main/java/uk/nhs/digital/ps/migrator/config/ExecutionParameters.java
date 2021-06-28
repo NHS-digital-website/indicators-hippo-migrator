@@ -30,6 +30,10 @@ public class ExecutionParameters {
     private Path nationalIndicatorAttachmentPath;
     private Path gdprSrcSpreadsheetPath;
     private String gdprSrcSpreadsheetName;
+    private Path cyberSrcSpreadsheetPath;
+    private String organisationSrcSpreadsheetName;
+    private String platformSrcSpreadsheetName;
+    private String cyberalertSrcSpreadsheetName;
 
     public Path getNesstarUnzippedExportDir() {
         return nesstarUnzippedExportDir;
@@ -175,6 +179,38 @@ public class ExecutionParameters {
         return gdprSrcSpreadsheetName;
     }
 
+    public void setCyberSrcWorkbookPath(final Path cyberSrcSpreadsheetPath) {
+        this.cyberSrcSpreadsheetPath = cyberSrcSpreadsheetPath;
+    }
+
+    public Path getCyberSrcSpreadsheetPath() {
+        return cyberSrcSpreadsheetPath;
+    }
+
+    public void setOrganisationSpreadsheetName(final String organisationSrcSpreadsheetName) {
+        this.organisationSrcSpreadsheetName = organisationSrcSpreadsheetName;
+    }
+
+    public void setPlatformSpreadsheetName(final String platformSrcSpreadsheetName) {
+        this.platformSrcSpreadsheetName = platformSrcSpreadsheetName;
+    }
+
+    public void setCyberalertSpreadsheetName(final String cyberalertSrcSpreadsheetName) {
+        this.cyberalertSrcSpreadsheetName = cyberalertSrcSpreadsheetName;
+    }
+
+    public String getOrganisationSrcSpreadsheetName() {
+        return organisationSrcSpreadsheetName;
+    }
+
+    public String getPlatformSrcSpreadsheetName() {
+        return platformSrcSpreadsheetName;
+    }
+
+    public String getCyberalertSrcSpreadsheetName() {
+        return cyberalertSrcSpreadsheetName;
+    }
+
     public List<Descriptor> descriptions() {
         return asList(
             describe("nesstarUnzippedExportDir", nesstarUnzippedExportDir),
@@ -193,7 +229,11 @@ public class ExecutionParameters {
             describe("nationalIndicatorAttachmentPath", nationalIndicatorAttachmentPath),
             describe("importPackageDir", importPackageDir),
             describe("gdprSrcSpreadsheetPath", gdprSrcSpreadsheetPath),
-            describe("gdprSrcSpreadsheetName", gdprSrcSpreadsheetName)
+            describe("gdprSrcSpreadsheetName", gdprSrcSpreadsheetName),
+            describe("cyberSrcSpreadsheetPath", cyberSrcSpreadsheetPath),
+            describe("organisationSrcSpreadsheetName", organisationSrcSpreadsheetName),
+            describe("platformSrcSpreadsheetName", platformSrcSpreadsheetName),
+            describe("cyberalertSrcSpreadsheetName", cyberalertSrcSpreadsheetName)
         );
     }
 }

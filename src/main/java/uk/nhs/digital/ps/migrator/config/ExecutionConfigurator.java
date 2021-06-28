@@ -48,6 +48,11 @@ public class ExecutionConfigurator {
     private static final String GDPR_SOURCE_WORKBOOK_PATH = "gdprSrcWorkbookPath";
     private static final String GDPR_SOURCE_SPREADSHEET_NAME = "gdprSrcSpreadsheetName";
 
+    private static final String CYBER_SOURCE_WORKBOOK_PATH = "cyberSrcWorkbookPath";
+    private static final String ORGANISATION_SOURCE_SPREADSHEET_NAME = "organisationSrcSpreadsheetName";
+    private static final String PLATFORM_SOURCE_SPREADSHEET_NAME = "platformSrcSpreadsheetName";
+    private static final String CYBERALERT_SOURCE_SPREADSHEET_NAME = "cyberalertSrcSpreadsheetName";
+
 
     private final ExecutionParameters executionParameters;
 
@@ -85,6 +90,7 @@ public class ExecutionConfigurator {
         initTaxonomyDefinitionOutputPath(args);
         initImportPackageDir();
         initGdprSettings(args);
+        initCyberSettings(args);
     }
 
     private void initGdprSettings(final ApplicationArguments args) {
@@ -97,6 +103,32 @@ public class ExecutionConfigurator {
             getSingleStringValue(args, GDPR_SOURCE_SPREADSHEET_NAME)
         );
     }
+
+    private void initCyberSettings(final ApplicationArguments args) {
+        if (args.containsOption(CYBER_SOURCE_WORKBOOK_PATH)) {
+            executionParameters.setCyberSrcWorkbookPath(getPathArg(args,
+                    CYBER_SOURCE_WORKBOOK_PATH));
+        }
+
+        if (args.containsOption(ORGANISATION_SOURCE_SPREADSHEET_NAME)) {
+            executionParameters.setOrganisationSpreadsheetName(
+                    getSingleStringValue(args, ORGANISATION_SOURCE_SPREADSHEET_NAME)
+            );
+        }
+
+        if (args.containsOption(PLATFORM_SOURCE_SPREADSHEET_NAME)) {
+            executionParameters.setPlatformSpreadsheetName(
+                    getSingleStringValue(args, PLATFORM_SOURCE_SPREADSHEET_NAME)
+            );
+        }
+
+        if (args.containsOption(CYBERALERT_SOURCE_SPREADSHEET_NAME)) {
+            executionParameters.setCyberalertSpreadsheetName(
+                    getSingleStringValue(args, CYBERALERT_SOURCE_SPREADSHEET_NAME)
+            );
+        }
+    }
+
 
     private String getSingleStringValue(final ApplicationArguments args, final String key) {
         return args.containsOption(key) ? args.getOptionValues(key).get(0) : null;
@@ -223,9 +255,28 @@ public class ExecutionConfigurator {
                 "Path to the workbook with content of GDPR documents to convert to EXIM compatible files."
             ),
             describe(
-                GDPR_SOURCE_SPREADSHEET_NAME,
-                "Name of the spreadsheed defining GDPR document to import from workbook given by --" +
+                    GDPR_SOURCE_SPREADSHEET_NAME,
+                "Name of the spreadsheet defining GDPR document to import from workbook given by --" +
                     GDPR_SOURCE_WORKBOOK_PATH
+            ),
+            describe(
+                    CYBER_SOURCE_WORKBOOK_PATH,
+                "Path to the workbook with content of Cyber documents to convert to EXIM compatible files."
+            ),
+            describe(
+                    ORGANISATION_SOURCE_SPREADSHEET_NAME,
+                "Name of the spreadsheet defining Organisation document to import from workbook given by --" +
+                        CYBER_SOURCE_WORKBOOK_PATH
+            ),
+            describe(
+                    PLATFORM_SOURCE_SPREADSHEET_NAME,
+                    "Name of the spreadsheet defining Platform document to import from workbook given by --" +
+                        CYBER_SOURCE_WORKBOOK_PATH
+            ),
+            describe(
+                    CYBERALERT_SOURCE_SPREADSHEET_NAME,
+                    "Name of the spreadsheet defining Cyber alert document to import from workbook given by --" +
+                            CYBER_SOURCE_WORKBOOK_PATH
             )
         );
     }
